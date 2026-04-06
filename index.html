@@ -107,8 +107,6 @@
       font-family: inherit;
       font-size: 13px;
       font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: .4px;
       cursor: pointer;
       border-radius: 6px 6px 0 0;
       transition: all .2s;
@@ -195,13 +193,13 @@
     .btn-calc {
       margin-top: 20px;
       width: 100%;
-      padding: 14px;
+      padding: 11px;
       background: var(--orange);
       color: #fff;
       border: none;
       border-radius: var(--radius);
       font-family: inherit;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       letter-spacing: .3px;
       cursor: pointer;
@@ -400,6 +398,13 @@
       .tab-btn { font-size: 11px; padding: 10px 8px; min-width: 90px; }
       .result-card__value { font-size: 18px; }
     }
+    .advantages { max-width: 860px; margin: 32px auto; padding: 0 16px; }
+    .adv-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .adv-card { background: #fff; border-radius: 10px; padding: 20px 16px; text-align: center; box-shadow: 0 2px 12px rgba(26,54,93,.08); }
+    .adv-icon { font-size: 32px; margin-bottom: 8px; }
+    .adv-title { font-size: 14px; font-weight: 700; color: #1a2a3a; margin-bottom: 4px; }
+    .adv-desc { font-size: 13px; color: #6b7a8d; }
+    @media (max-width: 600px) { .adv-grid { grid-template-columns: 1fr 1fr; } }
   </style>
 </head>
 <body>
@@ -416,9 +421,9 @@
 <!-- MAIN -->
 <main>
   <div class="tabs-nav">
-    <button class="tab-btn active" onclick="switchTab(0)">Сухие<br>смеси</button>
+    <button class="tab-btn active" onclick="switchTab(0)">Сухие смеси</button>
     <button class="tab-btn"        onclick="switchTab(1)">Бетон</button>
-    <button class="tab-btn"        onclick="switchTab(2)">Инертные<br>материалы</button>
+    <button class="tab-btn"        onclick="switchTab(2)">Инертные материалы</button>
   </div>
 
   <!-- TAB 1: СУХИЕ СМЕСИ -->
@@ -561,6 +566,31 @@
     </div>
   </div>
 </main>
+
+<section class="advantages">
+  <div class="adv-grid">
+    <div class="adv-card">
+      <div class="adv-icon">🏭</div>
+      <div class="adv-title">Своё производство</div>
+      <div class="adv-desc">Полный цикл с 2004 года</div>
+    </div>
+    <div class="adv-card">
+      <div class="adv-icon">🔬</div>
+      <div class="adv-title">Своя лаборатория</div>
+      <div class="adv-desc">Сертифицированный контроль качества</div>
+    </div>
+    <div class="adv-card">
+      <div class="adv-icon">🚛</div>
+      <div class="adv-title">Доставка</div>
+      <div class="adv-desc">Собственный автопарк по области</div>
+    </div>
+    <div class="adv-card">
+      <div class="adv-icon">📋</div>
+      <div class="adv-title">Документация</div>
+      <div class="adv-desc">Паспорта качества на каждую партию</div>
+    </div>
+  </div>
+</section>
 
 <!-- FOOTER -->
 <footer>
