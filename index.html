@@ -587,6 +587,10 @@
       <input type="tel"    id="m-phone"   placeholder="Телефон *" />
       <input type="email"  id="m-email"   placeholder="E-mail" />
       <textarea            id="m-comment" placeholder="Комментарий к заявке"></textarea>
+      <label class="checkbox-label" style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#6b7a8d;text-transform:none;letter-spacing:0;cursor:pointer;line-height:1.4">
+        <input type="checkbox" id="m-agree" style="margin-top:3px;width:18px;height:18px;flex-shrink:0;cursor:pointer;accent-color:#1a365d" />
+        Я даю согласие на <a href="privacy.html" target="_blank" style="color:#e67e22">обработку персональных данных</a>
+      </label>
       <button class="btn-calc" onclick="submitModal()">Отправить заявку</button>
     </div>
     <div class="modal-success" id="modalSuccess">
@@ -754,6 +758,10 @@
       alert('Пожалуйста, укажите имя и телефон.'); return;
     }
 
+    if (!document.getElementById('m-agree').checked) {
+      alert('Пожалуйста, дайте согласие на обработку персональных данных.'); return;
+    }
+
     const btn = document.querySelector('#modalForm .btn-calc');
     btn.disabled = true;
     btn.textContent = 'Отправка…';
@@ -769,6 +777,7 @@
       document.getElementById('m-phone').value = '';
       document.getElementById('m-email').value = '';
       document.getElementById('m-comment').value = '';
+      document.getElementById('m-agree').checked = false;
       btn.disabled = false;
       btn.textContent = 'Отправить заявку';
       document.getElementById('modalForm').style.display = 'none';
