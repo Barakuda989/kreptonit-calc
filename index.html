@@ -573,6 +573,7 @@
     <a href="mailto:gusevcement@yandex.ru">gusevcement@yandex.ru</a>
   </div>
   <div class="footer-city">г. Гусев, ул. Победы, 51</div>
+  <div class="footer-city"><a href="privacy.html" style="color:rgba(255,255,255,.5)">Политика конфиденциальности</a></div>
 </footer>
 
 <!-- MODAL -->
@@ -588,10 +589,10 @@
       <input type="email"  id="m-email"   placeholder="E-mail" />
       <textarea            id="m-comment" placeholder="Комментарий к заявке"></textarea>
       <label class="checkbox-label" style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#6b7a8d;text-transform:none;letter-spacing:0;cursor:pointer;line-height:1.4">
-        <input type="checkbox" id="m-agree" style="margin-top:3px;width:18px;height:18px;flex-shrink:0;cursor:pointer;accent-color:#1a365d" />
-        Я даю согласие на <a href="privacy.html" target="_blank" style="color:#e67e22">обработку персональных данных</a>
+        <input type="checkbox" id="m-agree" style="margin-top:3px;width:18px;height:18px;flex-shrink:0;cursor:pointer;accent-color:#1a365d" onchange="document.getElementById('m-submit').disabled=!this.checked" />
+        Я согласен с <a href="privacy.html" target="_blank" style="color:#e67e22">политикой конфиденциальности</a>
       </label>
-      <button class="btn-calc" onclick="submitModal()">Отправить заявку</button>
+      <button id="m-submit" class="btn-calc" onclick="submitModal()" disabled>Отправить заявку</button>
     </div>
     <div class="modal-success" id="modalSuccess">
       <div class="check">✓</div>
@@ -762,7 +763,7 @@
       alert('Пожалуйста, дайте согласие на обработку персональных данных.'); return;
     }
 
-    const btn = document.querySelector('#modalForm .btn-calc');
+    const btn = document.getElementById('m-submit');
     btn.disabled = true;
     btn.textContent = 'Отправка…';
 
