@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Политика конфиденциальности — Крептонит</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:  #1a365d;
+      --orange: #e67e22;
+      --white: #ffffff;
+      --bg: #f0f4f8;
+      --text: #1a2a3a;
+      --muted: #6b7a8d;
+      --radius: 10px;
+      --shadow: 0 4px 24px rgba(26,54,93,.13);
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      background: var(--blue);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.2);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: var(--orange);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 900; color: #fff;
+    }
+    .logo-text {
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .logo-text span { color: var(--orange); }
+    .header-link {
+      color: rgba(255,255,255,.75);
+      font-size: 13px;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,.3);
+      padding: 6px 14px;
+      border-radius: 20px;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .header-link:hover { background: rgba(255,255,255,.12); color: #fff; }
+
+    /* ─── CONTENT ─── */
+    main {
+      flex: 1;
+      max-width: 860px;
+      width: 100%;
+      margin: 32px auto;
+      padding: 0 16px;
+    }
+
+    .content-box {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 32px 32px 40px;
+    }
+
+    h1 {
+      font-size: 22px;
+      color: var(--blue);
+      margin-bottom: 24px;
+      line-height: 1.3;
+    }
+
+    h2 {
+      font-size: 16px;
+      color: var(--blue);
+      margin-top: 28px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    ul {
+      margin: 8px 0 12px 20px;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: var(--orange);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .back-link:hover { text-decoration: underline; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--blue);
+      color: rgba(255,255,255,.75);
+      padding: 24px;
+      text-align: center;
+      font-size: 14px;
+      line-height: 2;
+      margin-top: auto;
+    }
+    footer a { color: var(--orange); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    .footer-city { font-size: 13px; color: rgba(255,255,255,.5); }
+
+    @media (max-width: 600px) {
+      header { padding: 0 16px; height: 56px; }
+      .logo-text { font-size: 15px; }
+      .header-link { display: none; }
+      main { margin: 16px auto; }
+      .content-box { padding: 20px 16px 28px; }
+      h1 { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a class="logo" href="https://www.kreptonit.ru/" target="_blank" rel="noopener">
+    <div class="logo-icon">К</div>
+    <div class="logo-text">Крептонит<br><span>Калькуляторы</span></div>
+  </a>
+  <a class="header-link" href="https://www.kreptonit.ru/" target="_blank" rel="noopener">Перейти на сайт →</a>
+</header>
+
+<!-- MAIN -->
+<main>
+  <a class="back-link" href="index.html">← Вернуться к калькуляторам</a>
+
+  <div class="content-box">
+    <h1>Политика конфиденциальности</h1>
+
+    <p>Дата публикации: 6 апреля 2026 г.</p>
+
+    <h2>1. Общие положения</h2>
+    <p>Настоящая Политика конфиденциальности определяет порядок обработки и защиты персональных данных пользователей сайта (далее — «Сайт»), который принадлежит ООО СК «Эдиль» (ИНН 3902069038, адрес: 238055, Калининградская область, г. Гусев, ул. Победы, 51; далее — «Оператор»).</p>
+    <p>Используя Сайт и отправляя формы заявок, пользователь выражает согласие с условиями данной Политики.</p>
+
+    <h2>2. Какие данные мы собираем</h2>
+    <p>При отправке заявки через форму на Сайте пользователь предоставляет следующие данные:</p>
+    <ul>
+      <li>Имя</li>
+      <li>Номер телефона</li>
+      <li>Адрес электронной почты (необязательно)</li>
+      <li>Текст комментария к заявке</li>
+    </ul>
+
+    <h2>3. Цели обработки данных</h2>
+    <p>Персональные данные обрабатываются исключительно в следующих целях:</p>
+    <ul>
+      <li>Обработка заявок на расчёт стоимости продукции</li>
+      <li>Связь с пользователем по вопросам его заявки</li>
+      <li>Предоставление информации о продукции и услугах</li>
+    </ul>
+
+    <h2>4. Правовые основания</h2>
+    <p>Обработка персональных данных осуществляется на основании согласия пользователя (п. 1 ч. 1 ст. 6 Федерального закона от 27.07.2006 № 152-ФЗ «О персональных данных»).</p>
+
+    <h2>5. Порядок обработки и хранения</h2>
+    <p>Оператор принимает необходимые организационные и технические меры для защиты персональных данных от несанкционированного доступа, изменения, раскрытия или уничтожения.</p>
+    <p>Заявки передаются на электронную почту Оператора. Данные не передаются третьим лицам, за исключением случаев, предусмотренных законодательством Российской Федерации.</p>
+
+    <h2>6. Сроки хранения</h2>
+    <p>Персональные данные хранятся в течение срока, необходимого для достижения целей обработки, но не более 3 (трёх) лет с момента получения.</p>
+
+    <h2>7. Права пользователя</h2>
+    <p>Пользователь имеет право:</p>
+    <ul>
+      <li>Запросить информацию о своих персональных данных</li>
+      <li>Потребовать уточнения, блокирования или уничтожения данных</li>
+      <li>Отозвать согласие на обработку персональных данных</li>
+    </ul>
+    <p>Для реализации указанных прав направьте запрос на <a href="mailto:gusevcement@yandex.ru" style="color: var(--orange);">gusevcement@yandex.ru</a> или позвоните по телефону <a href="tel:+79216174920" style="color: var(--orange);">+7 921 617-49-20</a>.</p>
+
+    <h2>8. Файлы cookie</h2>
+    <p>Сайт не использует файлы cookie и не осуществляет автоматический сбор технических данных пользователей.</p>
+
+    <h2>9. Изменения политики</h2>
+    <p>Оператор оставляет за собой право вносить изменения в настоящую Политику. Актуальная версия всегда доступна на данной странице.</p>
+
+    <h2>10. Контактная информация</h2>
+    <p>
+      ООО СК «Эдиль»<br>
+      ИНН: 3902069038<br>
+      Адрес: 238055, Калининградская область, г. Гусев, ул. Победы, 51<br>
+      Телефон: <a href="tel:+79216174920" style="color: var(--orange);">+7 921 617-49-20</a><br>
+      E-mail: <a href="mailto:gusevcement@yandex.ru" style="color: var(--orange);">gusevcement@yandex.ru</a>
+    </p>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <strong style="color:#fff">Крептонит</strong> — строительные материалы
+  </div>
+  <div>
+    <a href="tel:+79216174920">+7 921 617-49-20</a>
+    &nbsp;·&nbsp;
+    <a href="mailto:gusevcement@yandex.ru">gusevcement@yandex.ru</a>
+  </div>
+  <div class="footer-city">г. Гусев, ул. Победы, 51</div>
+</footer>
+
+</body>
+</html>
