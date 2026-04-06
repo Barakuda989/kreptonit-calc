@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Крептонит — Калькуляторы</title>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init("K4Bp3BF4bc1Jq8TH9");</script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:  #1a365d;
+      --blue2: #22477a;
+      --orange: #e67e22;
+      --orange2: #f39c12;
+      --white: #ffffff;
+      --bg: #f0f4f8;
+      --text: #1a2a3a;
+      --muted: #6b7a8d;
+      --border: #d0dae6;
+      --radius: 10px;
+      --shadow: 0 4px 24px rgba(26,54,93,.13);
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      background: var(--blue);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.2);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: var(--orange);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 900; color: #fff;
+      flex-shrink: 0;
+    }
+    .logo-text {
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .logo-text span { color: var(--orange); }
+    .header-link {
+      color: rgba(255,255,255,.75);
+      font-size: 13px;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,.3);
+      padding: 6px 14px;
+      border-radius: 20px;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .header-link:hover { background: rgba(255,255,255,.12); color: #fff; }
+
+    /* ─── MAIN ─── */
+    main {
+      flex: 1;
+      max-width: 860px;
+      width: 100%;
+      margin: 32px auto;
+      padding: 0 16px;
+    }
+
+    /* ─── TABS ─── */
+    .tabs-nav {
+      display: flex;
+      gap: 4px;
+      background: var(--white);
+      border-radius: var(--radius) var(--radius) 0 0;
+      padding: 6px 6px 0;
+      box-shadow: var(--shadow);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tabs-nav::-webkit-scrollbar { display: none; }
+
+    .tab-btn {
+      flex: 1;
+      min-width: 110px;
+      padding: 12px 10px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      cursor: pointer;
+      border-radius: 6px 6px 0 0;
+      transition: all .2s;
+      white-space: nowrap;
+      position: relative;
+    }
+    .tab-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: transparent;
+      border-radius: 3px 3px 0 0;
+      transition: background .2s;
+    }
+    .tab-btn.active {
+      background: var(--blue);
+      color: #fff;
+    }
+    .tab-btn.active::after { background: var(--orange); }
+    .tab-btn:not(.active):hover { background: var(--bg); color: var(--blue); }
+
+    .tab-panel {
+      display: none;
+      background: var(--white);
+      border-radius: 0 0 var(--radius) var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px 28px 32px;
+    }
+    .tab-panel.active { display: block; }
+
+    /* ─── FORM ELEMENTS ─── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .3px;
+    }
+
+    select, input[type="number"] {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 15px;
+      color: var(--text);
+      background: var(--white);
+      transition: border-color .2s, box-shadow .2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7a8d' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+    select:focus, input[type="number"]:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(26,54,93,.1);
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button { opacity: 1; }
+
+    .hint { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    /* ─── BUTTON ─── */
+    .btn-calc {
+      margin-top: 20px;
+      width: 100%;
+      padding: 14px;
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: .3px;
+      cursor: pointer;
+      transition: background .2s, transform .1s;
+    }
+    .btn-calc:hover { background: var(--orange2); }
+    .btn-calc:active { transform: scale(.98); }
+
+    /* ─── RESULT BOX ─── */
+    .result-box {
+      margin-top: 24px;
+      background: var(--bg);
+      border-left: 4px solid var(--orange);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 20px 22px;
+      display: none;
+    }
+    .result-box.visible { display: block; }
+    .result-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .result-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: 0 1px 6px rgba(26,54,93,.08);
+    }
+    .result-card__label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .3px;
+      margin-bottom: 6px;
+    }
+    .result-card__value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--blue);
+      line-height: 1.1;
+    }
+    .result-card__unit {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+    .result-card.accent .result-card__value { color: var(--orange); }
+
+    .delivery-note {
+      font-size: 13px;
+      color: var(--muted);
+      background: rgba(230,126,34,.08);
+      border: 1px solid rgba(230,126,34,.25);
+      border-radius: var(--radius);
+      padding: 9px 14px;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .btn-request {
+      width: 100%;
+      padding: 12px;
+      background: var(--white);
+      color: var(--blue);
+      border: 2px solid var(--blue);
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .2s;
+      letter-spacing: .2px;
+    }
+    .btn-request:hover { background: var(--blue); color: #fff; }
+
+    /* ─── MODAL ─── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--white);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+      overflow: hidden;
+      animation: slideUp .25s ease;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-head {
+      background: var(--blue);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-head h2 { color: #fff; font-size: 17px; }
+    .modal-close {
+      background: rgba(255,255,255,.15);
+      border: none;
+      color: #fff;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .modal-close:hover { background: rgba(255,255,255,.3); }
+
+    .modal-body { padding: 24px; display: flex; flex-direction: column; gap: 14px; }
+
+    .modal-body input,
+    .modal-body textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 15px;
+      color: var(--text);
+      transition: border-color .2s;
+    }
+    .modal-body textarea { resize: vertical; min-height: 80px; }
+    .modal-body input:focus,
+    .modal-body textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(26,54,93,.1);
+    }
+
+    .modal-body .btn-calc { margin-top: 0; }
+
+    .modal-success {
+      display: none;
+      text-align: center;
+      padding: 32px 24px;
+    }
+    .modal-success.show { display: block; }
+    .modal-success .check {
+      width: 56px; height: 56px;
+      background: #e8f5e9;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      margin: 0 auto 16px;
+    }
+    .modal-success h3 { color: var(--blue); font-size: 18px; margin-bottom: 8px; }
+    .modal-success p { color: var(--muted); font-size: 14px; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--blue);
+      color: rgba(255,255,255,.75);
+      padding: 24px;
+      text-align: center;
+      font-size: 14px;
+      line-height: 2;
+      margin-top: auto;
+    }
+    footer a { color: var(--orange); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    .footer-city { font-size: 13px; color: rgba(255,255,255,.5); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 600px) {
+      header { padding: 0 16px; height: 56px; }
+      .logo-text { font-size: 15px; }
+      .header-link { display: none; }
+      main { margin: 16px auto; }
+      .tab-panel { padding: 20px 16px 24px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .tab-btn { font-size: 11px; padding: 10px 8px; min-width: 90px; }
+      .result-card__value { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a class="logo" href="https://www.kreptonit.ru/" target="_blank" rel="noopener">
+    <div class="logo-icon">К</div>
+    <div class="logo-text">Крептонит<br><span>Калькуляторы</span></div>
+  </a>
+  <a class="header-link" href="https://www.kreptonit.ru/" target="_blank" rel="noopener">Перейти на сайт →</a>
+</header>
+
+<!-- MAIN -->
+<main>
+  <div class="tabs-nav">
+    <button class="tab-btn active" onclick="switchTab(0)">Сухие<br>смеси</button>
+    <button class="tab-btn"        onclick="switchTab(1)">Бетон</button>
+    <button class="tab-btn"        onclick="switchTab(2)">Инертные<br>материалы</button>
+  </div>
+
+  <!-- TAB 1: СУХИЕ СМЕСИ -->
+  <div class="tab-panel active" id="tab0">
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>Тип смеси</label>
+        <select id="t1-mix">
+          <option value="heat_glue">Клей для теплоизоляции</option>
+          <option value="tile_glue">Клей для плитки</option>
+          <option value="masonry">Кладочная смесь</option>
+          <option value="plaster">Штукатурная смесь</option>
+          <option value="deco_plaster">Декоративная штукатурка</option>
+          <option value="floor_leveling">Напольная выравнивающая</option>
+          <option value="floor_self">Напольная самовыравнивающая</option>
+          <option value="block_glue">Клей для блоков</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Площадь, м²</label>
+        <input type="number" id="t1-area" placeholder="например 50" min="0.1" step="0.1" />
+      </div>
+      <div class="form-group">
+        <label>Толщина слоя, мм</label>
+        <input type="number" id="t1-thick" placeholder="например 10" min="1" step="1" />
+      </div>
+    </div>
+    <button class="btn-calc" onclick="calcTab1()">Рассчитать</button>
+
+    <div class="result-box" id="t1-result">
+      <div class="result-title">Результат расчёта</div>
+      <div class="result-grid">
+        <div class="result-card">
+          <div class="result-card__label">Расход смеси</div>
+          <div class="result-card__value" id="t1-r-kg">—</div>
+          <div class="result-card__unit">кг</div>
+        </div>
+        <div class="result-card accent">
+          <div class="result-card__label">Мешков 25 кг</div>
+          <div class="result-card__value" id="t1-r-bags">—</div>
+          <div class="result-card__unit">шт.</div>
+        </div>
+      </div>
+      <button class="btn-request" onclick="openModal('t1')">Запросить цену</button>
+    </div>
+  </div>
+
+  <!-- TAB 2: БЕТОН -->
+  <div class="tab-panel" id="tab1">
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>Тип бетона</label>
+        <select id="t2-type" onchange="updateGrades()">
+          <option value="gravel">Бетон на гравии</option>
+          <option value="pump">Бетон для автобетононасоса</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label>Марка бетона</label>
+        <select id="t2-grade"></select>
+      </div>
+      <div class="form-group">
+        <label>Длина, м</label>
+        <input type="number" id="t2-len" placeholder="например 10" min="0.1" step="0.1" />
+      </div>
+      <div class="form-group">
+        <label>Ширина, м</label>
+        <input type="number" id="t2-wid" placeholder="например 5" min="0.1" step="0.1" />
+      </div>
+      <div class="form-group">
+        <label>Высота (толщина), м</label>
+        <input type="number" id="t2-hei" placeholder="например 0.2" min="0.01" step="0.01" />
+      </div>
+    </div>
+    <button class="btn-calc" onclick="calcTab2()">Рассчитать</button>
+
+    <div class="result-box" id="t2-result">
+      <div class="result-title">Результат расчёта</div>
+      <div class="result-grid">
+        <div class="result-card">
+          <div class="result-card__label">Объём бетона</div>
+          <div class="result-card__value" id="t2-r-vol">—</div>
+          <div class="result-card__unit">м³</div>
+        </div>
+        <div class="result-card accent">
+          <div class="result-card__label">Миксеров 7 м³</div>
+          <div class="result-card__value" id="t2-r-mixers">—</div>
+          <div class="result-card__unit">шт.</div>
+        </div>
+      </div>
+      <p class="delivery-note">Доставка — 1&nbsp;150 руб/час.&nbsp;&nbsp;Автобетононасос — 2&nbsp;500 руб/час</p>
+      <button class="btn-request" onclick="openModal('t2')">Запросить цену</button>
+    </div>
+  </div>
+
+  <!-- TAB 3: ИНЕРТНЫЕ МАТЕРИАЛЫ -->
+  <div class="tab-panel" id="tab2">
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>Материал</label>
+        <select id="t3-mat">
+          <option value="sand">Песок (насыпная плотность 1,5 т/м³)</option>
+          <option value="crushed">Щебень (насыпная плотность 1,4 т/м³)</option>
+          <option value="gravel">Гравий (насыпная плотность 1,6 т/м³)</option>
+          <option value="pgs">ПГС — песчано-гравийная смесь (1,65 т/м³)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Площадь, м²</label>
+        <input type="number" id="t3-area" placeholder="например 100" min="0.1" step="0.1" />
+      </div>
+      <div class="form-group">
+        <label>Толщина слоя, см</label>
+        <input type="number" id="t3-thick" placeholder="например 20" min="1" step="1" />
+        <span class="hint">Подсыпка под фундамент — 20–30 см</span>
+      </div>
+    </div>
+    <button class="btn-calc" onclick="calcTab3()">Рассчитать</button>
+
+    <div class="result-box" id="t3-result">
+      <div class="result-title">Результат расчёта</div>
+      <div class="result-grid">
+        <div class="result-card">
+          <div class="result-card__label">Объём</div>
+          <div class="result-card__value" id="t3-r-vol">—</div>
+          <div class="result-card__unit">м³</div>
+        </div>
+        <div class="result-card">
+          <div class="result-card__label">Вес</div>
+          <div class="result-card__value" id="t3-r-ton">—</div>
+          <div class="result-card__unit">тонн</div>
+        </div>
+        <div class="result-card accent">
+          <div class="result-card__label">Самосвалов 10 м³</div>
+          <div class="result-card__value" id="t3-r-trucks">—</div>
+          <div class="result-card__unit">шт.</div>
+        </div>
+      </div>
+      <button class="btn-request" onclick="openModal('t3')">Запросить цену</button>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <strong style="color:#fff">Крептонит</strong> — строительные материалы
+  </div>
+  <div>
+    <a href="tel:+79216174920">+7 921 617-49-20</a>
+    &nbsp;·&nbsp;
+    <a href="mailto:gusevcement@yandex.ru">gusevcement@yandex.ru</a>
+  </div>
+  <div class="footer-city">г. Гусев, ул. Победы, 51</div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="overlayClick(event)">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Запросить цену</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalForm">
+      <input type="text"   id="m-name"    placeholder="Ваше имя *" />
+      <input type="tel"    id="m-phone"   placeholder="Телефон *" />
+      <input type="email"  id="m-email"   placeholder="E-mail" />
+      <textarea            id="m-comment" placeholder="Комментарий к заявке"></textarea>
+      <button class="btn-calc" onclick="submitModal()">Отправить заявку</button>
+    </div>
+    <div class="modal-success" id="modalSuccess">
+      <div class="check">✓</div>
+      <h3>Заявка отправлена!</h3>
+      <p>Мы свяжемся с вами в ближайшее время.<br>Тел: +7 921 617-49-20</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── Tabs ── */
+  function switchTab(i) {
+    document.querySelectorAll('.tab-btn').forEach((b, idx) =>
+      b.classList.toggle('active', idx === i));
+    document.querySelectorAll('.tab-panel').forEach((p, idx) =>
+      p.classList.toggle('active', idx === i));
+  }
+
+  /* ── Helpers ── */
+  function fmt(n) { return n.toLocaleString('ru-RU', { maximumFractionDigits: 2 }); }
+  function fmtInt(n) { return n.toLocaleString('ru-RU'); }
+  function getVal(id) { return parseFloat(document.getElementById(id).value); }
+
+  /* ── Result summaries (для автоподстановки в комментарий) ── */
+  const calcResults = { t1: '', t2: '', t3: '' };
+
+  /* ── TAB 1: Сухие смеси ── */
+  // расход кг на м² на 1 мм толщины
+  const mixRate = {
+    heat_glue:     1.0,
+    tile_glue:     1.1,
+    masonry:       1.65,
+    plaster:       1.5,
+    deco_plaster:  1.3,
+    floor_leveling: 1.6,
+    floor_self:    1.55,
+    block_glue:    1.0,
+  };
+
+  function calcTab1() {
+    const area  = getVal('t1-area');
+    const thick = getVal('t1-thick');
+    const mix   = document.getElementById('t1-mix').value;
+    const mixName = document.getElementById('t1-mix').options[document.getElementById('t1-mix').selectedIndex].text;
+
+    if (!area || !thick || area <= 0 || thick <= 0) {
+      alert('Пожалуйста, заполните площадь и толщину слоя.'); return;
+    }
+
+    const rate    = mixRate[mix] || 1.5;
+    const totalKg = area * thick * rate;
+    const bags    = Math.ceil(totalKg / 25);
+
+    document.getElementById('t1-r-kg').textContent  = fmt(totalKg);
+    document.getElementById('t1-r-bags').textContent = fmtInt(bags);
+    document.getElementById('t1-result').classList.add('visible');
+
+    calcResults.t1 =
+      `Расчёт: Сухие смеси\n` +
+      `Тип смеси: ${mixName}\n` +
+      `Площадь: ${fmt(area)} м², толщина слоя: ${thick} мм\n` +
+      `Расход: ${fmt(totalKg)} кг (${fmtInt(bags)} меш. по 25 кг)`;
+  }
+
+  /* ── TAB 2: Бетон ── */
+  const gradesMap = {
+    gravel: ['М200W2','М200W4','М200W6','М250','М250W4','М250W6','М250W8',
+             'М300','М300W4','М300W6','М300W8','М350','М350W6','М350W8'],
+    pump:   ['М100','М150','М200','М200W2','М200W4','М200W6',
+             'М250','М250W2','М250W4','М250W6','М350W8'],
+  };
+
+  function updateGrades() {
+    const type = document.getElementById('t2-type').value;
+    const sel  = document.getElementById('t2-grade');
+    sel.innerHTML = gradesMap[type].map(g => `<option>${g}</option>`).join('');
+  }
+
+  updateGrades(); // инициализация при загрузке
+
+  function calcTab2() {
+    const len  = getVal('t2-len');
+    const wid  = getVal('t2-wid');
+    const hei  = getVal('t2-hei');
+    const type = document.getElementById('t2-type').value;
+    const typeName = document.getElementById('t2-type').options[document.getElementById('t2-type').selectedIndex].text;
+    const grade = document.getElementById('t2-grade').value;
+
+    if (!len || !wid || !hei || len <= 0 || wid <= 0 || hei <= 0) {
+      alert('Пожалуйста, заполните длину, ширину и высоту.'); return;
+    }
+
+    const volM3  = len * wid * hei;
+    const mixers = Math.ceil(volM3 / 7);
+
+    document.getElementById('t2-r-vol').textContent    = fmt(volM3);
+    document.getElementById('t2-r-mixers').textContent = fmtInt(mixers);
+    document.getElementById('t2-result').classList.add('visible');
+
+    calcResults.t2 =
+      `Расчёт: Бетон\n` +
+      `Тип: ${typeName}\n` +
+      `Марка: ${grade}\n` +
+      `Размеры: ${fmt(len)} × ${fmt(wid)} × ${fmt(hei)} м → объём: ${fmt(volM3)} м³\n` +
+      `Миксеров (7 м³): ${fmtInt(mixers)} шт.`;
+  }
+
+  /* ── TAB 3: Инертные материалы ── */
+  const density     = { sand: 1.5, crushed: 1.4, gravel: 1.6, pgs: 1.65 };
+  const matNames    = { sand: 'Песок', crushed: 'Щебень', gravel: 'Гравий', pgs: 'ПГС' };
+
+  function calcTab3() {
+    const area  = getVal('t3-area');
+    const thick = getVal('t3-thick');
+    const mat   = document.getElementById('t3-mat').value;
+
+    if (!area || !thick || area <= 0 || thick <= 0) {
+      alert('Пожалуйста, заполните площадь и толщину слоя.'); return;
+    }
+
+    const volM3  = area * (thick / 100);
+    const tons   = volM3 * (density[mat] || 1.5);
+    const trucks = Math.ceil(volM3 / 10);
+
+    document.getElementById('t3-r-vol').textContent    = fmt(volM3);
+    document.getElementById('t3-r-ton').textContent    = fmt(tons);
+    document.getElementById('t3-r-trucks').textContent = fmtInt(trucks);
+    document.getElementById('t3-result').classList.add('visible');
+
+    calcResults.t3 =
+      `Расчёт: Инертные материалы\n` +
+      `Материал: ${matNames[mat]} (плотность ${density[mat]} т/м³)\n` +
+      `Площадь: ${fmt(area)} м², толщина слоя: ${thick} см\n` +
+      `Объём: ${fmt(volM3)} м³\n` +
+      `Вес: ${fmt(tons)} т\n` +
+      `Самосвалов (10 м³): ${fmtInt(trucks)} шт.`;
+  }
+
+  /* ── Modal ── */
+  function openModal(tab) {
+    document.getElementById('modalOverlay').classList.add('open');
+    document.getElementById('modalForm').style.display = 'flex';
+    document.getElementById('modalSuccess').classList.remove('show');
+    const comment = document.getElementById('m-comment');
+    comment.value = calcResults[tab] || '';
+    if (!comment.value) comment.placeholder = 'Уточните объём, сроки и пожелания';
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+
+  function overlayClick(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  }
+
+  function submitModal() {
+    const name    = document.getElementById('m-name').value.trim();
+    const phone   = document.getElementById('m-phone').value.trim();
+    const email   = document.getElementById('m-email').value.trim();
+    const comment = document.getElementById('m-comment').value.trim();
+
+    if (!name || !phone) {
+      alert('Пожалуйста, укажите имя и телефон.'); return;
+    }
+
+    const btn = document.querySelector('#modalForm .btn-calc');
+    btn.disabled = true;
+    btn.textContent = 'Отправка…';
+
+    emailjs.send('service_kpb637i', 'template_5zgq5y8', {
+      from_name: name,
+      phone:     phone,
+      email:     email || '—',
+      message:   comment || '—',
+    })
+    .then(() => {
+      document.getElementById('m-name').value = '';
+      document.getElementById('m-phone').value = '';
+      document.getElementById('m-email').value = '';
+      document.getElementById('m-comment').value = '';
+      btn.disabled = false;
+      btn.textContent = 'Отправить заявку';
+      document.getElementById('modalForm').style.display = 'none';
+      document.getElementById('modalSuccess').classList.add('show');
+      setTimeout(closeModal, 3200);
+    })
+    .catch(err => {
+      console.error('EmailJS error:', err);
+      alert('Ошибка, позвоните 8(40143)34474');
+      btn.disabled = false;
+      btn.textContent = 'Отправить заявку';
+    });
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+  });
+</script>
+</body>
+</html>
