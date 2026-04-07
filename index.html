@@ -30,6 +30,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      font-size: 17px;
     }
 
     /* ─── HEADER ─── */
@@ -57,6 +58,7 @@
       flex-shrink: 0;
     }
     .logo-text {
+
       color: #fff;
       font-size: 18px;
       font-weight: 700;
@@ -65,7 +67,7 @@
     .logo-text span { color: var(--orange); }
     .header-link {
       color: rgba(255,255,255,.75);
-      font-size: 13px;
+      font-size: 17px;
       text-decoration: none;
       border: 1px solid rgba(255,255,255,.3);
       padding: 6px 14px;
@@ -105,7 +107,7 @@
       background: transparent;
       color: var(--muted);
       font-family: inherit;
-      font-size: 13px;
+      font-size: 17px;
       font-weight: 600;
       cursor: pointer;
       border-radius: 6px 6px 0 0;
@@ -152,7 +154,7 @@
     .form-group.full { grid-column: 1 / -1; }
 
     label {
-      font-size: 13px;
+      font-size: 17px;
       font-weight: 600;
       color: var(--muted);
       text-transform: uppercase;
@@ -165,7 +167,7 @@
       border: 1.5px solid var(--border);
       border-radius: var(--radius);
       font-family: inherit;
-      font-size: 15px;
+      font-size: 17px;
       color: var(--text);
       background: var(--white);
       transition: border-color .2s, box-shadow .2s;
@@ -187,7 +189,7 @@
     input[type="number"]::-webkit-inner-spin-button,
     input[type="number"]::-webkit-outer-spin-button { opacity: 1; }
 
-    .hint { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .hint { font-size: 14px; color: var(--muted); margin-top: 2px; }
 
     /* ─── BUTTON ─── */
     .btn-calc {
@@ -199,7 +201,7 @@
       border: none;
       border-radius: var(--radius);
       font-family: inherit;
-      font-size: 15px;
+      font-size: 17px;
       font-weight: 700;
       letter-spacing: .3px;
       cursor: pointer;
@@ -219,7 +221,7 @@
     }
     .result-box.visible { display: block; }
     .result-title {
-      font-size: 12px;
+      font-size: 16px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: .5px;
@@ -239,27 +241,27 @@
       box-shadow: 0 1px 6px rgba(26,54,93,.08);
     }
     .result-card__label {
-      font-size: 11px;
+      font-size: 15px;
       color: var(--muted);
       text-transform: uppercase;
       letter-spacing: .3px;
       margin-bottom: 6px;
     }
     .result-card__value {
-      font-size: 22px;
+      font-size: 26px;
       font-weight: 700;
       color: var(--blue);
       line-height: 1.1;
     }
     .result-card__unit {
-      font-size: 12px;
+      font-size: 16px;
       color: var(--muted);
       margin-top: 3px;
     }
     .result-card.accent .result-card__value { color: var(--orange); }
 
     .delivery-note {
-      font-size: 13px;
+      font-size: 17px;
       color: var(--muted);
       background: rgba(230,126,34,.08);
       border: 1px solid rgba(230,126,34,.25);
@@ -277,7 +279,7 @@
       border: 2px solid var(--blue);
       border-radius: var(--radius);
       font-family: inherit;
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 700;
       cursor: pointer;
       transition: all .2s;
@@ -342,7 +344,7 @@
       border: 1.5px solid var(--border);
       border-radius: var(--radius);
       font-family: inherit;
-      font-size: 15px;
+      font-size: 17px;
       color: var(--text);
       transition: border-color .2s;
     }
@@ -371,7 +373,7 @@
       margin: 0 auto 16px;
     }
     .modal-success h3 { color: var(--blue); font-size: 18px; margin-bottom: 8px; }
-    .modal-success p { color: var(--muted); font-size: 14px; }
+    .modal-success p { color: var(--muted); font-size: 16px; }
 
     /* ─── FOOTER ─── */
     footer {
@@ -379,32 +381,26 @@
       color: rgba(255,255,255,.75);
       padding: 24px;
       text-align: center;
-      font-size: 14px;
+      font-size: 16px;
       line-height: 2;
       margin-top: auto;
     }
     footer a { color: var(--orange); text-decoration: none; }
     footer a:hover { text-decoration: underline; }
-    .footer-city { font-size: 13px; color: rgba(255,255,255,.5); }
+    .footer-city { font-size: 14px; color: rgba(255,255,255,.5); }
 
     /* ─── RESPONSIVE ─── */
     @media (max-width: 600px) {
       header { padding: 0 16px; height: 56px; }
-      .logo-text { font-size: 15px; }
+      .logo-text {
+ font-size: 17px; }
       .header-link { display: none; }
       main { margin: 16px auto; }
       .tab-panel { padding: 20px 16px 24px; }
       .form-grid { grid-template-columns: 1fr; }
-      .tab-btn { font-size: 11px; padding: 10px 8px; min-width: 90px; }
+      .tab-btn { font-size: 13px; padding: 10px 8px; min-width: 90px; }
       .result-card__value { font-size: 18px; }
     }
-    .advantages { max-width: 860px; margin: 32px auto; padding: 0 16px; }
-    .adv-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-    .adv-card { background: #fff; border-radius: 10px; padding: 20px 16px; text-align: center; box-shadow: 0 2px 12px rgba(26,54,93,.08); }
-    .adv-icon { font-size: 32px; margin-bottom: 8px; }
-    .adv-title { font-size: 14px; font-weight: 700; color: #1a2a3a; margin-bottom: 4px; }
-    .adv-desc { font-size: 13px; color: #6b7a8d; }
-    @media (max-width: 600px) { .adv-grid { grid-template-columns: 1fr 1fr; } }
   </style>
 </head>
 <body>
@@ -567,31 +563,6 @@
   </div>
 </main>
 
-<section class="advantages">
-  <div class="adv-grid">
-    <div class="adv-card">
-      <div class="adv-icon">🏭</div>
-      <div class="adv-title">Своё производство</div>
-      <div class="adv-desc">Полный цикл с 2004 года</div>
-    </div>
-    <div class="adv-card">
-      <div class="adv-icon">🔬</div>
-      <div class="adv-title">Своя лаборатория</div>
-      <div class="adv-desc">Сертифицированный контроль качества</div>
-    </div>
-    <div class="adv-card">
-      <div class="adv-icon">🚛</div>
-      <div class="adv-title">Доставка</div>
-      <div class="adv-desc">Собственный автопарк по области</div>
-    </div>
-    <div class="adv-card">
-      <div class="adv-icon">📋</div>
-      <div class="adv-title">Документация</div>
-      <div class="adv-desc">Паспорта качества на каждую партию</div>
-    </div>
-  </div>
-</section>
-
 <!-- FOOTER -->
 <footer>
   <div>
@@ -618,7 +589,7 @@
       <input type="tel"    id="m-phone"   placeholder="Телефон *" />
       <input type="email"  id="m-email"   placeholder="E-mail" />
       <textarea            id="m-comment" placeholder="Комментарий к заявке"></textarea>
-      <label class="checkbox-label" style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#6b7a8d;text-transform:none;letter-spacing:0;cursor:pointer;line-height:1.4">
+      <label class="checkbox-label" style="display:flex;align-items:flex-start;gap:8px;font-size:15px;color:#6b7a8d;text-transform:none;letter-spacing:0;cursor:pointer;line-height:1.4">
         <input type="checkbox" id="m-agree" style="margin-top:3px;width:18px;height:18px;flex-shrink:0;cursor:pointer;accent-color:#1a365d" onchange="document.getElementById('m-submit').disabled=!this.checked" />
         Я согласен с <a href="privacy.html" target="_blank" style="color:#e67e22">политикой конфиденциальности</a>
       </label>
