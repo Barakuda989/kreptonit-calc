@@ -3,10 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Крептонит — Калькуляторы</title>
+  <title>Крептонит — Калькуляторы бетона, сухих смесей и инертных материалов</title>
+  <meta name="description" content="Онлайн-калькуляторы строительных материалов завода «Крептонит» (ГК «Эдиль»). Рассчитайте объём бетона, расход сухих смесей и количество инертных материалов. Калининградская область, г. Гусев." />
   <!-- PWA -->
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#1a365d" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
@@ -82,6 +84,55 @@
       white-space: nowrap;
     }
     .header-link:hover { background: rgba(255,255,255,.12); color: #fff; }
+
+    /* ─── PHONE BAR ─── */
+    .phone-bar {
+      background: linear-gradient(135deg, var(--orange), #d35400);
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 16px;
+      color: #fff;
+    }
+    .phone-bar a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .phone-bar a:hover { text-decoration: underline; }
+    .phone-bar span { font-weight: 400; font-size: 14px; opacity: .85; }
+
+    /* ─── H1 ─── */
+    .page-title {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 20px;
+      line-height: 1.3;
+    }
+
+    /* ─── RESERVE CHECKBOX ─── */
+    .reserve-row {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .reserve-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--orange);
+      cursor: pointer;
+    }
+    .reserve-row label {
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: none;
+      color: var(--muted);
+      cursor: pointer;
+    }
 
     /* ─── MAIN ─── */
     main {
@@ -292,19 +343,19 @@
 
     .btn-request {
       width: 100%;
-      padding: 12px;
-      background: var(--white);
-      color: var(--blue);
-      border: 2px solid var(--blue);
+      padding: 14px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
       border-radius: var(--radius);
       font-family: inherit;
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 700;
       cursor: pointer;
       transition: all .2s;
-      letter-spacing: .2px;
+      letter-spacing: .3px;
     }
-    .btn-request:hover { background: var(--blue); color: #fff; }
+    .btn-request:hover { background: var(--blue2); transform: scale(.98); }
 
     /* ─── MODAL ─── */
     .modal-overlay {
@@ -476,9 +527,11 @@
     /* ─── RESPONSIVE ─── */
     @media (max-width: 600px) {
       header { padding: 0 16px; height: 56px; }
-      .logo-text {
- font-size: 17px; }
+      .logo-text { font-size: 17px; }
       .header-link { display: none; }
+      .phone-bar { font-size: 14px; padding: 8px 12px; }
+      .phone-bar a { font-size: 16px; }
+      .page-title { font-size: 17px; margin-bottom: 14px; }
       main { margin: 16px auto; }
       .tab-panel { padding: 20px 16px 24px; }
       .form-grid { grid-template-columns: 1fr; }
@@ -498,8 +551,15 @@
   <a class="header-link" href="https://www.kreptonit.ru/" target="_blank" rel="noopener">Перейти на сайт →</a>
 </header>
 
+<!-- PHONE BAR -->
+<div class="phone-bar">
+  <span>Звоните: </span><a href="tel:+79216174920">+7 921 617-49-20</a>
+  <span> · Отдел заказов: </span><a href="tel:84014334474">8 (40143) 34474</a>
+</div>
+
 <!-- MAIN -->
 <main>
+  <h1 class="page-title">Калькуляторы строительных материалов<br>завода «Крептонит»</h1>
   <div class="tabs-nav">
     <button class="tab-btn active" onclick="switchTab(0)">Сухие смеси</button>
     <button class="tab-btn"        onclick="switchTab(1)">Бетон</button>
@@ -530,6 +590,18 @@
       <div class="form-group">
         <label>Толщина слоя, мм</label>
         <input type="number" id="t1-thick" placeholder="например 10" min="1" step="1" />
+        <span class="hint" id="t1-hint">Клей — 3–6 мм, штукатурка — 10–20 мм, кладка — 10–15 мм</span>
+      </div>
+      <div class="form-group">
+        <label>Фасовка</label>
+        <select id="t1-bag">
+          <option value="25">Мешок 25 кг</option>
+          <option value="50">Мешок 50 кг</option>
+        </select>
+      </div>
+      <div class="reserve-row">
+        <input type="checkbox" id="t1-reserve" />
+        <label for="t1-reserve">Добавить 10% запас на потери</label>
       </div>
     </div>
     <button class="btn-calc" onclick="calcTab1()">Рассчитать</button>
@@ -543,7 +615,7 @@
           <div class="result-card__unit">кг</div>
         </div>
         <div class="result-card accent">
-          <div class="result-card__label">Мешков 25 кг</div>
+          <div class="result-card__label" id="t1-r-bags-label">Мешков 25 кг</div>
           <div class="result-card__value" id="t1-r-bags">—</div>
           <div class="result-card__unit">шт.</div>
         </div>
@@ -553,7 +625,7 @@
           <div class="result-card__unit">руб.</div>
         </div>
       </div>
-      <button class="btn-request" onclick="openModal('t1')">Запросить цену</button>
+      <button class="btn-request" onclick="openModal('t1')">📞 Получить расчёт за 5 минут</button>
     </div>
   </div>
 
@@ -583,6 +655,10 @@
         <label>Высота (толщина), м</label>
         <input type="number" id="t2-hei" placeholder="например 0.2" min="0.01" step="0.01" />
       </div>
+      <div class="reserve-row">
+        <input type="checkbox" id="t2-reserve" />
+        <label for="t2-reserve">Добавить 10% запас на потери</label>
+      </div>
     </div>
     <button class="btn-calc" onclick="calcTab2()">Рассчитать</button>
 
@@ -606,7 +682,7 @@
         </div>
       </div>
       <p class="delivery-note">Доставка — 1&nbsp;150 руб/час.&nbsp;&nbsp;Автобетононасос — 2&nbsp;500 руб/час</p>
-      <button class="btn-request" onclick="openModal('t2')">Запросить цену</button>
+      <button class="btn-request" onclick="openModal('t2')">📞 Получить расчёт за 5 минут</button>
     </div>
   </div>
 
@@ -641,6 +717,10 @@
           <option value="20">20 м³ — полуприцеп</option>
         </select>
       </div>
+      <div class="reserve-row">
+        <input type="checkbox" id="t3-reserve" />
+        <label for="t3-reserve">Добавить 10% запас на потери</label>
+      </div>
     </div>
     <button class="btn-calc" onclick="calcTab3()">Рассчитать</button>
 
@@ -668,7 +748,7 @@
           <div class="result-card__unit">руб.</div>
         </div>
       </div>
-      <button class="btn-request" onclick="openModal('t3')">Запросить цену</button>
+      <button class="btn-request" onclick="openModal('t3')">📞 Получить расчёт за 5 минут</button>
     </div>
   </div>
 
@@ -805,29 +885,50 @@
     block_glue:    1.0,
   };
 
+  /* ── Подсказки по толщине для каждого типа смеси ── */
+  const mixHints = {
+    heat_glue:      'Рекомендуемый слой: 3–6 мм',
+    tile_glue:      'Рекомендуемый слой: 3–6 мм',
+    masonry:        'Рекомендуемый слой: 10–15 мм',
+    plaster:        'Рекомендуемый слой: 10–20 мм',
+    deco_plaster:   'Рекомендуемый слой: 2–5 мм',
+    floor_leveling: 'Рекомендуемый слой: 10–50 мм',
+    floor_self:     'Рекомендуемый слой: 5–30 мм',
+    block_glue:     'Рекомендуемый слой: 2–5 мм',
+  };
+
+  // Обновляем подсказку при смене типа смеси
+  document.getElementById('t1-mix').addEventListener('change', function() {
+    document.getElementById('t1-hint').textContent = mixHints[this.value] || '';
+  });
+
   function calcTab1() {
     const area  = getVal('t1-area');
     const thick = getVal('t1-thick');
     const mix   = document.getElementById('t1-mix').value;
     const mixName = document.getElementById('t1-mix').options[document.getElementById('t1-mix').selectedIndex].text;
+    const bagSize = parseFloat(document.getElementById('t1-bag').value) || 25;
+    const reserve = document.getElementById('t1-reserve').checked ? 1.1 : 1;
 
     if (!area || !thick || area <= 0 || thick <= 0) {
       alert('Пожалуйста, заполните площадь и толщину слоя.'); return;
     }
 
     const rate    = mixRate[mix] || 1.5;
-    const totalKg = area * thick * rate;
-    const bags    = Math.ceil(totalKg / 25);
+    const totalKg = area * thick * rate * reserve;
+    const bags    = Math.ceil(totalKg / bagSize);
 
     document.getElementById('t1-r-kg').textContent  = fmt(totalKg);
     document.getElementById('t1-r-bags').textContent = fmtInt(bags);
+    document.getElementById('t1-r-bags-label').textContent = `Мешков ${bagSize} кг`;
     document.getElementById('t1-result').classList.add('visible');
 
+    const reserveText = reserve > 1 ? ' (с запасом 10%)' : '';
     calcResults.t1 =
-      `Расчёт: Сухие смеси\n` +
+      `Расчёт: Сухие смеси${reserveText}\n` +
       `Тип смеси: ${mixName}\n` +
       `Площадь: ${fmt(area)} м², толщина слоя: ${thick} мм\n` +
-      `Расход: ${fmt(totalKg)} кг (${fmtInt(bags)} меш. по 25 кг)`;
+      `Расход: ${fmt(totalKg)} кг (${fmtInt(bags)} меш. по ${bagSize} кг)`;
   }
 
   /* ── TAB 2: Бетон ── */
@@ -853,20 +954,22 @@
     const type = document.getElementById('t2-type').value;
     const typeName = document.getElementById('t2-type').options[document.getElementById('t2-type').selectedIndex].text;
     const grade = document.getElementById('t2-grade').value;
+    const reserve = document.getElementById('t2-reserve').checked ? 1.1 : 1;
 
     if (!len || !wid || !hei || len <= 0 || wid <= 0 || hei <= 0) {
       alert('Пожалуйста, заполните длину, ширину и высоту.'); return;
     }
 
-    const volM3  = len * wid * hei;
+    const volM3  = len * wid * hei * reserve;
     const mixers = Math.ceil(volM3 / 7);
 
     document.getElementById('t2-r-vol').textContent    = fmt(volM3);
     document.getElementById('t2-r-mixers').textContent = fmtInt(mixers);
     document.getElementById('t2-result').classList.add('visible');
 
+    const reserveText = reserve > 1 ? ' (с запасом 10%)' : '';
     calcResults.t2 =
-      `Расчёт: Бетон\n` +
+      `Расчёт: Бетон${reserveText}\n` +
       `Тип: ${typeName}\n` +
       `Марка: ${grade}\n` +
       `Размеры: ${fmt(len)} × ${fmt(wid)} × ${fmt(hei)} м → объём: ${fmt(volM3)} м³\n` +
@@ -882,12 +985,13 @@
     const thick = getVal('t3-thick');
     const mat   = document.getElementById('t3-mat').value;
     const truckVol = parseFloat(document.getElementById('t3-truck').value) || 10;
+    const reserve = document.getElementById('t3-reserve').checked ? 1.1 : 1;
 
     if (!area || !thick || area <= 0 || thick <= 0) {
       alert('Пожалуйста, заполните площадь и толщину слоя.'); return;
     }
 
-    const volM3  = area * (thick / 100);
+    const volM3  = area * (thick / 100) * reserve;
     const tons   = volM3 * (density[mat] || 1.5);
     const trucks = Math.ceil(volM3 / truckVol);
 
@@ -897,8 +1001,9 @@
     document.getElementById('t3-r-trucks-label').textContent = `Самосвалов ${truckVol} м³`;
     document.getElementById('t3-result').classList.add('visible');
 
+    const reserveText = reserve > 1 ? ' (с запасом 10%)' : '';
     calcResults.t3 =
-      `Расчёт: Инертные материалы\n` +
+      `Расчёт: Инертные материалы${reserveText}\n` +
       `Материал: ${matNames[mat]} (плотность ${density[mat]} т/м³)\n` +
       `Площадь: ${fmt(area)} м², толщина слоя: ${thick} см\n` +
       `Объём: ${fmt(volM3)} м³\n` +
@@ -1085,9 +1190,11 @@
   const _origCalcTab1 = calcTab1;
   calcTab1 = function() {
     _origCalcTab1();
-    const mix  = document.getElementById('t1-mix').value;
-    const bags = Math.ceil(getVal('t1-area') * getVal('t1-thick') * (mixRate[mix] || 1.5) / 25);
-    const price = getPrice('mix_' + mix);
+    const mix     = document.getElementById('t1-mix').value;
+    const bagSize = parseFloat(document.getElementById('t1-bag').value) || 25;
+    const reserve = document.getElementById('t1-reserve').checked ? 1.1 : 1;
+    const bags    = Math.ceil(getVal('t1-area') * getVal('t1-thick') * (mixRate[mix] || 1.5) * reserve / bagSize);
+    const price   = getPrice('mix_' + mix);
     showCost('t1-r-cost-card', 't1-r-cost', bags * price);
   };
 
@@ -1095,12 +1202,12 @@
   const _origCalcTab2 = calcTab2;
   calcTab2 = function() {
     _origCalcTab2();
-    const type  = document.getElementById('t2-type').value;
-    const grade = document.getElementById('t2-grade').value;
-    const volM3 = getVal('t2-len') * getVal('t2-wid') * getVal('t2-hei');
-    // Ключ: concrete_М200W2 или pump_М200W2
-    const prefix = type === 'gravel' ? 'concrete_' : 'pump_';
-    const price  = getPrice(prefix + grade);
+    const type    = document.getElementById('t2-type').value;
+    const grade   = document.getElementById('t2-grade').value;
+    const reserve = document.getElementById('t2-reserve').checked ? 1.1 : 1;
+    const volM3   = getVal('t2-len') * getVal('t2-wid') * getVal('t2-hei') * reserve;
+    const prefix  = type === 'gravel' ? 'concrete_' : 'pump_';
+    const price   = getPrice(prefix + grade);
     showCost('t2-r-cost-card', 't2-r-cost', volM3 * price);
   };
 
@@ -1108,12 +1215,11 @@
   const _origCalcTab3 = calcTab3;
   calcTab3 = function() {
     _origCalcTab3();
-    const mat  = document.getElementById('t3-mat').value;
-    const area  = getVal('t3-area');
-    const thick = getVal('t3-thick');
-    const volM3 = area * (thick / 100);
-    const tons  = volM3 * (density[mat] || 1.5);
-    const price = getPrice('inert_' + mat);
+    const mat     = document.getElementById('t3-mat').value;
+    const reserve = document.getElementById('t3-reserve').checked ? 1.1 : 1;
+    const volM3   = getVal('t3-area') * (getVal('t3-thick') / 100) * reserve;
+    const tons    = volM3 * (density[mat] || 1.5);
+    const price   = getPrice('inert_' + mat);
     showCost('t3-r-cost-card', 't3-r-cost', tons * price);
   };
 
