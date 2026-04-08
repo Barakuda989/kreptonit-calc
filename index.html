@@ -960,21 +960,6 @@
     if (e.key === 'Escape') closeModal();
   });
 
-  /* ── Admin-режим: ?admin в URL или ранее активированный ── */
-  // Если открыли с ?admin — запоминаем навсегда на этом устройстве
-  if (new URLSearchParams(window.location.search).has('admin')) {
-    localStorage.setItem('kreptonit_admin', '1');
-  }
-  const isAdmin = localStorage.getItem('kreptonit_admin') === '1';
-
-  if (isAdmin) {
-    // Показываем вкладку «Цены»
-    document.getElementById('tab-prices').style.display = '';
-    document.getElementById('tab3').style.display = '';
-    // Загружаем сохранённые цены в поля
-    loadPrices();
-  }
-
   /* ── Дефолтные цены (ориентир по рынку Калининградской области) ── */
   const DEFAULT_PRICES = {
     // Сухие смеси — руб. за мешок 25 кг
@@ -1058,6 +1043,18 @@
       const prices = Object.assign({}, DEFAULT_PRICES, saved);
       return prices[key] || 0;
     } catch(e) { return 0; }
+  }
+
+  /* ── Admin-режим: ?admin в URL или ранее активированный ── */
+  if (new URLSearchParams(window.location.search).has('admin')) {
+    localStorage.setItem('kreptonit_admin', '1');
+  }
+  const isAdmin = localStorage.getItem('kreptonit_admin') === '1';
+
+  if (isAdmin) {
+    document.getElementById('tab-prices').style.display = '';
+    document.getElementById('tab3').style.display = '';
+    loadPrices();
   }
 
   /* ── Показать стоимость в карточке ── */
