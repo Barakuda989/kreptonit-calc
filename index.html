@@ -772,6 +772,7 @@
         </div>
       </div>
       <p class="delivery-note">Доставка — 1&nbsp;150 руб/час.&nbsp;&nbsp;Автобетононасос — 2&nbsp;500 руб/час</p>
+      <p class="delivery-note" id="t2-small-vol" style="display:none;border-color:#e74c3c;background:rgba(231,76,60,.08)">⚠ При объёме менее 1 м³ доставка миксером нецелесообразна. Рекомендуем ручной замес или позвоните: <a href="tel:84014334474" style="color:var(--orange);font-weight:700">8 (40143) 34474</a></p>
       <button class="btn-request" onclick="openModal('t2')">📞 Получить расчёт за 5 минут</button>
       <button class="btn-pdf" onclick="downloadPDF('t2')">📄 Скачать расчёт PDF</button>
     </div>
@@ -1103,6 +1104,7 @@
     document.getElementById('t2-r-vol').textContent    = fmt(volM3);
     document.getElementById('t2-r-mixers').textContent = fmtInt(mixers);
     document.getElementById('t2-result').classList.add('visible');
+    document.getElementById('t2-small-vol').style.display = volM3 < 1 ? '' : 'none';
 
     const reserveText = reserve > 1 ? ' (с запасом 10%)' : '';
     const shapeName   = shape === 'rect' ? 'Прямоугольная' : 'Круглое сечение';
