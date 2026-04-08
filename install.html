@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Как установить «Крептонит Калькуляторы»</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #1a365d;
+      --blue-light: #234578;
+      --orange: #e67e22;
+      --orange-soft: #fdf0e2;
+      --bg: #f4f6fa;
+      --card: #ffffff;
+      --text: #1e2d3d;
+      --muted: #7a8a9c;
+      --green: #27ae60;
+      --radius: 16px;
+    }
+
+    body {
+      font-family: 'Nunito', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── HEADER ─── */
+    .hero {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-light) 100%);
+      padding: 48px 24px 40px;
+      text-align: center;
+      color: #fff;
+    }
+    .hero-icon {
+      width: 72px; height: 72px;
+      background: var(--orange);
+      border-radius: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 38px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 24px rgba(230,126,34,.4);
+    }
+    .hero h1 {
+      font-size: 24px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    .hero p {
+      font-size: 15px;
+      color: rgba(255,255,255,.7);
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    /* ─── STEPS ─── */
+    .steps {
+      max-width: 480px;
+      margin: -20px auto 40px;
+      padding: 0 16px;
+    }
+
+    .step {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 16px rgba(26,54,93,.08);
+      position: relative;
+    }
+
+    .step-number {
+      position: absolute;
+      top: -12px;
+      left: 20px;
+      width: 32px; height: 32px;
+      background: var(--orange);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 900;
+      box-shadow: 0 3px 10px rgba(230,126,34,.35);
+    }
+
+    .step h2 {
+      font-size: 17px;
+      font-weight: 900;
+      color: var(--blue);
+      margin-bottom: 10px;
+      padding-top: 4px;
+    }
+
+    .step p {
+      font-size: 15px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .step p strong { color: var(--text); }
+
+    /* ─── PHONE MOCKUP ─── */
+    .phone-mock {
+      background: #1c1c1e;
+      border-radius: 20px;
+      padding: 12px;
+      max-width: 280px;
+      margin: 0 auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,.15);
+    }
+    .phone-screen {
+      background: #2c2c2e;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    /* Мокап адресной строки Chrome */
+    .mock-chrome-bar {
+      background: #3a3a3c;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mock-url-bar {
+      flex: 1;
+      background: #1c1c1e;
+      border-radius: 20px;
+      padding: 7px 12px;
+      font-size: 11px;
+      color: #a0a0a5;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mock-dots {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      cursor: default;
+      flex-shrink: 0;
+    }
+    .mock-dots.highlight {
+      background: var(--orange);
+      animation: pulse-dot 1.5s ease infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(230,126,34,.4); }
+      50% { box-shadow: 0 0 0 8px rgba(230,126,34,0); }
+    }
+    .mock-dots span {
+      width: 4px; height: 4px;
+      background: #fff;
+      border-radius: 50%;
+    }
+
+    /* Мокап контента страницы */
+    .mock-page {
+      padding: 16px;
+      text-align: center;
+    }
+    .mock-page-icon {
+      width: 44px; height: 44px;
+      background: var(--orange);
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .mock-page-title {
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .mock-page-sub {
+      color: #8e8e93;
+      font-size: 10px;
+      margin-top: 2px;
+    }
+    .mock-tabs {
+      display: flex;
+      gap: 4px;
+      margin-top: 12px;
+    }
+    .mock-tab {
+      flex: 1;
+      background: #3a3a3c;
+      border-radius: 6px;
+      padding: 6px 4px;
+      font-size: 9px;
+      color: #8e8e93;
+      text-align: center;
+    }
+    .mock-tab.active {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    /* Мокап выпадающего меню */
+    .mock-menu {
+      background: #2c2c2e;
+      border-radius: 12px;
+      padding: 6px 0;
+      margin-top: 12px;
+      border: 1px solid #3a3a3c;
+    }
+    .mock-menu-item {
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #e5e5ea;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .mock-menu-item.highlight {
+      background: rgba(230,126,34,.15);
+      color: var(--orange);
+      font-weight: 700;
+      border-radius: 8px;
+      margin: 2px 4px;
+    }
+    .mock-menu-item .icon-circle {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: #3a3a3c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .mock-menu-item.highlight .icon-circle {
+      background: var(--orange);
+      color: #fff;
+    }
+
+    /* Мокап диалога установки */
+    .mock-dialog {
+      background: #2c2c2e;
+      border-radius: 14px;
+      padding: 20px 16px;
+      margin-top: 12px;
+      text-align: center;
+      border: 1px solid #3a3a3c;
+    }
+    .mock-dialog h3 {
+      color: #fff;
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+    .mock-dialog p {
+      color: #8e8e93;
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+    .mock-dialog-btn {
+      display: inline-block;
+      background: var(--orange);
+      color: #fff;
+      border-radius: 10px;
+      padding: 10px 32px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* Мокап домашнего экрана */
+    .mock-home {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      padding: 20px 16px;
+    }
+    .mock-app {
+      text-align: center;
+    }
+    .mock-app-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      margin: 0 auto 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .mock-app-icon.grey { background: #3a3a3c; color: #8e8e93; }
+    .mock-app-icon.k {
+      background: var(--orange);
+      color: #fff;
+      font-weight: 900;
+      box-shadow: 0 3px 12px rgba(230,126,34,.5);
+      animation: pop-in 0.5s ease;
+    }
+    @keyframes pop-in {
+      0% { transform: scale(0); }
+      70% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+    .mock-app-name {
+      font-size: 9px;
+      color: #a0a0a5;
+    }
+    .mock-app-name.highlight {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    /* ─── TIP ─── */
+    .tip {
+      background: var(--orange-soft);
+      border-left: 4px solid var(--orange);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 16px 18px;
+      margin-top: 14px;
+      font-size: 14px;
+      color: #6d4c1a;
+      line-height: 1.5;
+    }
+    .tip strong { color: #b35c0a; }
+
+    /* ─── DONE BANNER ─── */
+    .done {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 28px 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 16px rgba(26,54,93,.08);
+      text-align: center;
+    }
+    .done-check {
+      width: 56px; height: 56px;
+      background: #e8f5e9;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+    .done h2 {
+      font-size: 18px;
+      color: var(--blue);
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+    .done p {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    /* ─── FOOTER ─── */
+    .guide-footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .guide-footer a { color: var(--orange); text-decoration: none; }
+
+    @media (max-width: 400px) {
+      .hero { padding: 36px 16px 32px; }
+      .hero h1 { font-size: 20px; }
+      .step { padding: 20px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-icon">К</div>
+  <h1>Установка на&nbsp;телефон</h1>
+  <p>Калькуляторы «Крептонит» — за&nbsp;3&nbsp;шага, работает без&nbsp;интернета</p>
+</div>
+
+<!-- STEPS -->
+<div class="steps">
+
+  <!-- ШАГ 1 -->
+  <div class="step">
+    <div class="step-number">1</div>
+    <h2>Откройте ссылку в Chrome</h2>
+    <p>Перейдите по ссылке в браузере <strong>Google Chrome</strong>:</p>
+    <p style="text-align:center;margin-bottom:16px">
+      <a href="https://barakuda989.github.io/kreptonit-calc/" 
+         style="color:var(--orange);font-weight:700;font-size:14px;word-break:break-all">
+        barakuda989.github.io/kreptonit-calc
+      </a>
+    </p>
+
+    <div class="phone-mock">
+      <div class="phone-screen">
+        <div class="mock-chrome-bar">
+          <div class="mock-url-bar">barakuda989.github.io/kreptonit-calc</div>
+          <div class="mock-dots highlight">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="mock-page">
+          <div class="mock-page-icon">К</div>
+          <div class="mock-page-title">Крептонит</div>
+          <div class="mock-page-sub">Калькуляторы</div>
+          <div class="mock-tabs">
+            <div class="mock-tab active">Сухие смеси</div>
+            <div class="mock-tab">Бетон</div>
+            <div class="mock-tab">Инертные</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip">
+      <strong>Важно:</strong> используйте именно Chrome. В других браузерах кнопка «Установить» может не появиться.
+    </div>
+  </div>
+
+  <!-- ШАГ 2 -->
+  <div class="step">
+    <div class="step-number">2</div>
+    <h2>Нажмите ⋮ → Установить</h2>
+    <p>Нажмите <strong>три точки ⋮</strong> в правом верхнем углу Chrome, затем выберите <strong>«Установить»</strong></p>
+
+    <div class="phone-mock">
+      <div class="phone-screen">
+        <div class="mock-chrome-bar">
+          <div class="mock-url-bar">barakuda989.github.io/kreptonit-calc</div>
+          <div class="mock-dots">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+        <div style="padding:8px">
+          <div class="mock-menu">
+            <div class="mock-menu-item">
+              <div class="icon-circle">↻</div>
+              Обновить
+            </div>
+            <div class="mock-menu-item">
+              <div class="icon-circle">★</div>
+              В закладки
+            </div>
+            <div class="mock-menu-item highlight">
+              <div class="icon-circle">↓</div>
+              Установить
+            </div>
+            <div class="mock-menu-item">
+              <div class="icon-circle">⤤</div>
+              Поделиться
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip">
+      <strong>Не перепутайте:</strong> нужна именно кнопка «Установить», а НЕ «Создать ярлык». Ярлык не работает офлайн.
+    </div>
+  </div>
+
+  <!-- ШАГ 3 -->
+  <div class="step">
+    <div class="step-number">3</div>
+    <h2>Подтвердите установку</h2>
+    <p>Появится окно — нажмите <strong>«Установить»</strong>. Иконка появится на главном экране.</p>
+
+    <div class="phone-mock">
+      <div class="phone-screen">
+        <div style="padding:12px">
+          <div class="mock-dialog">
+            <h3>Установить приложение?</h3>
+            <p>Крептонит — Калькуляторы</p>
+            <div class="mock-dialog-btn">Установить</div>
+          </div>
+        </div>
+        <div class="mock-home">
+          <div class="mock-app">
+            <div class="mock-app-icon grey">📷</div>
+            <div class="mock-app-name">Камера</div>
+          </div>
+          <div class="mock-app">
+            <div class="mock-app-icon grey">📞</div>
+            <div class="mock-app-name">Телефон</div>
+          </div>
+          <div class="mock-app">
+            <div class="mock-app-icon grey">💬</div>
+            <div class="mock-app-name">Сообщения</div>
+          </div>
+          <div class="mock-app">
+            <div class="mock-app-icon k">К</div>
+            <div class="mock-app-name highlight">Крептонит</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DONE -->
+  <div class="done">
+    <div class="done-check">✓</div>
+    <h2>Готово!</h2>
+    <p>Калькуляторы работают без интернета.<br>Откройте иконку «Крептонит» на&nbsp;главном экране.</p>
+  </div>
+
+</div>
+
+<div class="guide-footer">
+  <a href="https://barakuda989.github.io/kreptonit-calc/">Крептонит</a> — строительные материалы<br>
+  +7 921 617-49-20 · г. Гусев
+</div>
+
+</body>
+</html>
