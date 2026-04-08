@@ -7,6 +7,7 @@ const CACHE_NAME = 'kreptonit-v1';
 const FILES_TO_CACHE = [
   './',
   './index.html',
+  './install.html',
   './privacy.html',
   './manifest.json',
   './icons/icon-192.png',
