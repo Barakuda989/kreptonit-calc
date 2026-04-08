@@ -14,6 +14,7 @@
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>emailjs.init("K4Bp3BF4bc1Jq8TH9");</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -133,6 +134,61 @@
       color: var(--muted);
       cursor: pointer;
     }
+
+    /* ─── GRADES TABLE ─── */
+    .grades-toggle {
+      display: inline-block;
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--orange);
+      cursor: pointer;
+      font-weight: 600;
+      user-select: none;
+    }
+    .grades-toggle:hover { text-decoration: underline; }
+    .grades-table-wrap {
+      display: none;
+      margin-top: 12px;
+    }
+    .grades-table-wrap.open { display: block; }
+    .grades-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .grades-table th {
+      background: var(--blue);
+      color: #fff;
+      padding: 8px 10px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .3px;
+    }
+    .grades-table td {
+      padding: 7px 10px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    .grades-table tr:nth-child(even) td { background: var(--bg); }
+
+    /* ─── PDF BUTTON ─── */
+    .btn-pdf {
+      width: 100%;
+      padding: 11px;
+      margin-top: 8px;
+      background: transparent;
+      color: var(--muted);
+      border: 1.5px dashed var(--border);
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-pdf:hover { border-color: var(--blue); color: var(--blue); }
 
     /* ─── MAIN ─── */
     main {
@@ -626,6 +682,7 @@
         </div>
       </div>
       <button class="btn-request" onclick="openModal('t1')">📞 Получить расчёт за 5 минут</button>
+      <button class="btn-pdf" onclick="downloadPDF('t1')">📄 Скачать расчёт PDF</button>
     </div>
   </div>
 
@@ -680,6 +737,21 @@
     </div>
     <button class="btn-calc" onclick="calcTab2()">Рассчитать</button>
 
+    <!-- Справка по маркам -->
+    <span class="grades-toggle" onclick="this.nextElementSibling.classList.toggle('open')">▼ Подсказка: какая марка для чего?</span>
+    <div class="grades-table-wrap">
+      <table class="grades-table">
+        <tr><th>Марка</th><th>Класс</th><th>Применение</th></tr>
+        <tr><td>М100</td><td>B7.5</td><td>Подготовка, подбетонка, черновые полы</td></tr>
+        <tr><td>М150</td><td>B10–12.5</td><td>Стяжки, дорожки, отмостки</td></tr>
+        <tr><td>М200</td><td>B15</td><td>Фундаменты малоэтажных домов, полы, площадки</td></tr>
+        <tr><td>М250</td><td>B20</td><td>Ленточные и плитные фундаменты, лестницы</td></tr>
+        <tr><td>М300</td><td>B22.5</td><td>Монолитные перекрытия, стены, колонны</td></tr>
+        <tr><td>М350</td><td>B25</td><td>Несущие конструкции, бассейны, сваи</td></tr>
+      </table>
+      <p style="font-size:13px;color:var(--muted);margin-top:8px">W — водонепроницаемость. Чем выше W, тем лучше для подвалов и влажных грунтов.</p>
+    </div>
+
     <div class="result-box" id="t2-result">
       <div class="result-title">Результат расчёта</div>
       <div class="result-grid">
@@ -701,6 +773,7 @@
       </div>
       <p class="delivery-note">Доставка — 1&nbsp;150 руб/час.&nbsp;&nbsp;Автобетононасос — 2&nbsp;500 руб/час</p>
       <button class="btn-request" onclick="openModal('t2')">📞 Получить расчёт за 5 минут</button>
+      <button class="btn-pdf" onclick="downloadPDF('t2')">📄 Скачать расчёт PDF</button>
     </div>
   </div>
 
@@ -786,6 +859,7 @@
         </div>
       </div>
       <button class="btn-request" onclick="openModal('t3')">📞 Получить расчёт за 5 минут</button>
+      <button class="btn-pdf" onclick="downloadPDF('t3')">📄 Скачать расчёт PDF</button>
     </div>
   </div>
 
@@ -1105,6 +1179,63 @@
       `Объём: ${fmt(volM3)} м³\n` +
       `Вес: ${fmt(tons)} т\n` +
       `Самосвалов (${truckVol} м³): ${fmtInt(trucks)} шт.`;
+  }
+
+  /* ── PDF-выгрузка расчёта ── */
+  function downloadPDF(tab) {
+    const text = calcResults[tab];
+    if (!text) { alert('Сначала выполните расчёт.'); return; }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+
+    // Заголовок
+    doc.setFontSize(18);
+    doc.setTextColor(26, 54, 93);
+    doc.text('Крептонит — Расчёт материалов', 20, 25);
+
+    // Линия
+    doc.setDrawColor(230, 126, 34);
+    doc.setLineWidth(0.8);
+    doc.line(20, 30, 190, 30);
+
+    // Дата
+    doc.setFontSize(10);
+    doc.setTextColor(107, 122, 141);
+    const today = new Date().toLocaleDateString('ru-RU');
+    doc.text('Дата расчёта: ' + today, 20, 38);
+
+    // Результат расчёта
+    doc.setFontSize(12);
+    doc.setTextColor(26, 42, 58);
+    const lines = text.split('\n');
+    let y = 50;
+    lines.forEach(line => {
+      doc.text(line, 20, y);
+      y += 8;
+    });
+
+    // Контакты
+    y += 10;
+    doc.setDrawColor(208, 218, 230);
+    doc.setLineWidth(0.3);
+    doc.line(20, y, 190, y);
+    y += 10;
+    doc.setFontSize(11);
+    doc.setTextColor(26, 54, 93);
+    doc.text('ГК «Эдиль» — завод «Крептонит»', 20, y);
+    y += 7;
+    doc.setFontSize(10);
+    doc.setTextColor(107, 122, 141);
+    doc.text('Тел: +7 921 617-49-20 · Заказы: 8 (40143) 34474', 20, y);
+    y += 6;
+    doc.text('E-mail: gusevcement@yandex.ru', 20, y);
+    y += 6;
+    doc.text('Адрес: Калининградская обл., г. Гусев, ул. Победы, 51', 20, y);
+
+    // Сохраняем
+    const names = { t1: 'suhie-smesi', t2: 'beton', t3: 'inertnye' };
+    doc.save('kreptonit-raschet-' + (names[tab] || tab) + '.pdf');
   }
 
   /* ── Modal ── */
