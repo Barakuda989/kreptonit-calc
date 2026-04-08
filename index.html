@@ -733,7 +733,7 @@
   <div>
     <a href="tel:+79216174920">+7 921 617-49-20</a>
     &nbsp;·&nbsp;
-    <a href="mailto:gusevcement@yandex.ru">gusevcement@yandex.ru</a>
+    <a href="/cdn-cgi/l/email-protection#96f1e3e5f3e0f5f3fbf3f8e2d6eff7f8f2f3eeb8e4e3"><span class="__cf_email__" data-cfemail="e1869492849782848c848f95a198808f858499cf9394">[email&#160;protected]</span></a>
   </div>
   <div class="footer-city">г. Гусев, ул. Победы, 51</div>
   <div class="footer-city"><a href="privacy.html" style="color:rgba(255,255,255,.5)">Политика конфиденциальности</a></div>
@@ -765,7 +765,7 @@
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   /* ── Tabs ── */
   function switchTab(i) {
     document.querySelectorAll('.tab-btn').forEach((b, idx) =>
@@ -975,6 +975,54 @@
     loadPrices();
   }
 
+  /* ── Дефолтные цены (ориентир по рынку Калининградской области) ── */
+  const DEFAULT_PRICES = {
+    // Сухие смеси — руб. за мешок 25 кг
+    mix_heat_glue:     0,
+    mix_tile_glue:     0,
+    mix_masonry:       0,
+    mix_plaster:       0,
+    mix_deco_plaster:  0,
+    mix_floor_leveling:0,
+    mix_floor_self:    0,
+    mix_block_glue:    0,
+
+    // Бетон на гравии — руб/м³
+    'concrete_М200W2': 2900,
+    'concrete_М200W4': 3200,
+    'concrete_М200W6': 3270,
+    'concrete_М250':   3200,
+    'concrete_М250W4': 3380,
+    'concrete_М250W6': 3490,
+    'concrete_М250W8': 3690,
+    'concrete_М300':   3600,
+    'concrete_М300W4': 3690,
+    'concrete_М300W6': 4000,
+    'concrete_М300W8': 4100,
+    'concrete_М350':   3700,
+    'concrete_М350W6': 3780,
+    'concrete_М350W8': 3830,
+
+    // Бетон для автобетононасоса — руб/м³
+    'pump_М100':   2700,
+    'pump_М150':   2900,
+    'pump_М200':   3100,
+    'pump_М200W2': 3200,
+    'pump_М200W4': 3400,
+    'pump_М200W6': 3500,
+    'pump_М250':   3400,
+    'pump_М250W2': 3500,
+    'pump_М250W4': 3600,
+    'pump_М250W6': 3700,
+    'pump_М350W8': 4100,
+
+    // Инертные материалы — руб/тонну
+    inert_sand:    300,
+    inert_crushed: 650,
+    inert_gravel:  750,
+    inert_pgs:     850,
+  };
+
   /* ── Сохранение цен в localStorage ── */
   function savePrices() {
     const prices = {};
@@ -989,10 +1037,12 @@
     setTimeout(() => msg.classList.remove('show'), 2500);
   }
 
-  /* ── Загрузка цен из localStorage ── */
+  /* ── Загрузка цен из localStorage (с подстановкой дефолтов) ── */
   function loadPrices() {
     try {
-      const prices = JSON.parse(localStorage.getItem('kreptonit_prices') || '{}');
+      const saved  = JSON.parse(localStorage.getItem('kreptonit_prices') || '{}');
+      // Объединяем: дефолты + сохранённые (сохранённые приоритетнее)
+      const prices = Object.assign({}, DEFAULT_PRICES, saved);
       document.querySelectorAll('[data-price]').forEach(input => {
         if (prices[input.dataset.price]) {
           input.value = prices[input.dataset.price];
@@ -1001,10 +1051,11 @@
     } catch(e) {}
   }
 
-  /* ── Получить цену по ключу ── */
+  /* ── Получить цену по ключу (с дефолтом) ── */
   function getPrice(key) {
     try {
-      const prices = JSON.parse(localStorage.getItem('kreptonit_prices') || '{}');
+      const saved  = JSON.parse(localStorage.getItem('kreptonit_prices') || '{}');
+      const prices = Object.assign({}, DEFAULT_PRICES, saved);
       return prices[key] || 0;
     } catch(e) { return 0; }
   }
@@ -1054,14 +1105,4 @@
     const volM3 = area * (thick / 100);
     const tons  = volM3 * (density[mat] || 1.5);
     const price = getPrice('inert_' + mat);
-    showCost('t3-r-cost-card', 't3-r-cost', tons * price);
-  };
-</script>
-  <!-- Регистрация Service Worker для офлайн -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js');
-    }
-  </script>
-</body>
-</html>
+    showCost('t3-r-cost-card', '
