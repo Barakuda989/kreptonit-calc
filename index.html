@@ -381,6 +381,71 @@
     .modal-success h3 { color: var(--blue); font-size: 18px; margin-bottom: 8px; }
     .modal-success p { color: var(--muted); font-size: 16px; }
 
+    /* ─── ADMIN: вкладка цен ─── */
+    .price-section { margin-bottom: 24px; }
+    .price-section h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: .3px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--bg);
+    }
+    .price-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .price-row label {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: none;
+      color: var(--text);
+    }
+    .price-row input {
+      width: 120px;
+      padding: 8px 10px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 15px;
+      color: var(--text);
+      text-align: right;
+    }
+    .price-row input:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(26,54,93,.1);
+    }
+    .price-row .price-unit {
+      font-size: 13px;
+      color: var(--muted);
+      min-width: 50px;
+    }
+    .price-saved {
+      display: none;
+      color: #27ae60;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      padding: 10px;
+      background: #e8f5e9;
+      border-radius: var(--radius);
+      margin-top: 12px;
+    }
+    .price-saved.show { display: block; }
+
+    .result-card.cost {
+      background: linear-gradient(135deg, var(--blue) 0%, #22477a 100%);
+    }
+    .result-card.cost .result-card__label { color: rgba(255,255,255,.7); }
+    .result-card.cost .result-card__value { color: #fff; }
+    .result-card.cost .result-card__unit { color: rgba(255,255,255,.6); }
+
     /* ─── FOOTER ─── */
     footer {
       background: var(--blue);
@@ -426,6 +491,7 @@
     <button class="tab-btn active" onclick="switchTab(0)">Сухие смеси</button>
     <button class="tab-btn"        onclick="switchTab(1)">Бетон</button>
     <button class="tab-btn"        onclick="switchTab(2)">Инертные материалы</button>
+    <button class="tab-btn"        onclick="switchTab(3)" id="tab-prices" style="display:none">💰 Цены</button>
   </div>
 
   <!-- TAB 1: СУХИЕ СМЕСИ -->
@@ -467,6 +533,11 @@
           <div class="result-card__label">Мешков 25 кг</div>
           <div class="result-card__value" id="t1-r-bags">—</div>
           <div class="result-card__unit">шт.</div>
+        </div>
+        <div class="result-card cost" id="t1-r-cost-card" style="display:none">
+          <div class="result-card__label">Стоимость</div>
+          <div class="result-card__value" id="t1-r-cost">—</div>
+          <div class="result-card__unit">руб.</div>
         </div>
       </div>
       <button class="btn-request" onclick="openModal('t1')">Запросить цену</button>
@@ -514,6 +585,11 @@
           <div class="result-card__label">Миксеров 7 м³</div>
           <div class="result-card__value" id="t2-r-mixers">—</div>
           <div class="result-card__unit">шт.</div>
+        </div>
+        <div class="result-card cost" id="t2-r-cost-card" style="display:none">
+          <div class="result-card__label">Стоимость</div>
+          <div class="result-card__value" id="t2-r-cost">—</div>
+          <div class="result-card__unit">руб.</div>
         </div>
       </div>
       <p class="delivery-note">Доставка — 1&nbsp;150 руб/час.&nbsp;&nbsp;Автобетононасос — 2&nbsp;500 руб/час</p>
@@ -563,9 +639,76 @@
           <div class="result-card__value" id="t3-r-trucks">—</div>
           <div class="result-card__unit">шт.</div>
         </div>
+        <div class="result-card cost" id="t3-r-cost-card" style="display:none">
+          <div class="result-card__label">Стоимость</div>
+          <div class="result-card__value" id="t3-r-cost">—</div>
+          <div class="result-card__unit">руб.</div>
+        </div>
       </div>
       <button class="btn-request" onclick="openModal('t3')">Запросить цену</button>
     </div>
+  </div>
+
+  <!-- TAB 4: ЦЕНЫ (только для admin) -->
+  <div class="tab-panel" id="tab3" style="display:none">
+    <!-- Сухие смеси -->
+    <div class="price-section">
+      <h3>Сухие смеси — цена за мешок 25 кг</h3>
+      <div class="price-row"><label>Клей для теплоизоляции</label><input type="number" data-price="mix_heat_glue" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Клей для плитки</label><input type="number" data-price="mix_tile_glue" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Кладочная смесь</label><input type="number" data-price="mix_masonry" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Штукатурная смесь</label><input type="number" data-price="mix_plaster" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Декоративная штукатурка</label><input type="number" data-price="mix_deco_plaster" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Напольная выравнивающая</label><input type="number" data-price="mix_floor_leveling" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Напольная самовыравнивающая</label><input type="number" data-price="mix_floor_self" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Клей для блоков</label><input type="number" data-price="mix_block_glue" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+    </div>
+
+    <!-- Бетон -->
+    <div class="price-section">
+      <h3>Бетон на гравии — цена за м³</h3>
+      <div class="price-row"><label>М200W2</label><input type="number" data-price="concrete_М200W2" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М200W4</label><input type="number" data-price="concrete_М200W4" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М200W6</label><input type="number" data-price="concrete_М200W6" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М250</label><input type="number" data-price="concrete_М250" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М250W4</label><input type="number" data-price="concrete_М250W4" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М250W6</label><input type="number" data-price="concrete_М250W6" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М250W8</label><input type="number" data-price="concrete_М250W8" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М300</label><input type="number" data-price="concrete_М300" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М300W4</label><input type="number" data-price="concrete_М300W4" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М300W6</label><input type="number" data-price="concrete_М300W6" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М300W8</label><input type="number" data-price="concrete_М300W8" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М350</label><input type="number" data-price="concrete_М350" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М350W6</label><input type="number" data-price="concrete_М350W6" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М350W8</label><input type="number" data-price="concrete_М350W8" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+    </div>
+
+    <div class="price-section">
+      <h3>Бетон для автобетононасоса — цена за м³</h3>
+      <div class="price-row"><label>М100</label><input type="number" data-price="pump_М100" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М150</label><input type="number" data-price="pump_М150" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М200</label><input type="number" data-price="pump_М200" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М200W2</label><input type="number" data-price="pump_М200W2" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М200W4</label><input type="number" data-price="pump_М200W4" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М200W6</label><input type="number" data-price="pump_М200W6" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М250</label><input type="number" data-price="pump_М250" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М250W2</label><input type="number" data-price="pump_М250W2" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М250W4</label><input type="number" data-price="pump_М250W4" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М250W6</label><input type="number" data-price="pump_М250W6" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>М350W8</label><input type="number" data-price="pump_М350W8" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+    </div>
+
+    <!-- Инертные -->
+    <div class="price-section">
+      <h3>Инертные материалы — цена за тонну</h3>
+      <div class="price-row"><label>Песок</label><input type="number" data-price="inert_sand" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Щебень</label><input type="number" data-price="inert_crushed" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Гравий</label><input type="number" data-price="inert_gravel" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>ПГС</label><input type="number" data-price="inert_pgs" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+    </div>
+
+    <button class="btn-calc" onclick="savePrices()">Сохранить цены</button>
+    <div class="price-saved" id="price-saved-msg">✓ Цены сохранены</div>
   </div>
 </main>
 
@@ -803,6 +946,99 @@
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeModal();
   });
+
+  /* ── Admin-режим: ?admin в URL показывает вкладку Цены ── */
+  const isAdmin = new URLSearchParams(window.location.search).has('admin');
+
+  if (isAdmin) {
+    // Показываем вкладку «Цены»
+    document.getElementById('tab-prices').style.display = '';
+    document.getElementById('tab3').style.display = '';
+    // Загружаем сохранённые цены в поля
+    loadPrices();
+  }
+
+  /* ── Сохранение цен в localStorage ── */
+  function savePrices() {
+    const prices = {};
+    document.querySelectorAll('[data-price]').forEach(input => {
+      const val = parseFloat(input.value);
+      if (val > 0) prices[input.dataset.price] = val;
+    });
+    localStorage.setItem('kreptonit_prices', JSON.stringify(prices));
+    // Показываем подтверждение
+    const msg = document.getElementById('price-saved-msg');
+    msg.classList.add('show');
+    setTimeout(() => msg.classList.remove('show'), 2500);
+  }
+
+  /* ── Загрузка цен из localStorage ── */
+  function loadPrices() {
+    try {
+      const prices = JSON.parse(localStorage.getItem('kreptonit_prices') || '{}');
+      document.querySelectorAll('[data-price]').forEach(input => {
+        if (prices[input.dataset.price]) {
+          input.value = prices[input.dataset.price];
+        }
+      });
+    } catch(e) {}
+  }
+
+  /* ── Получить цену по ключу ── */
+  function getPrice(key) {
+    try {
+      const prices = JSON.parse(localStorage.getItem('kreptonit_prices') || '{}');
+      return prices[key] || 0;
+    } catch(e) { return 0; }
+  }
+
+  /* ── Показать стоимость в карточке ── */
+  function showCost(cardId, valueId, cost) {
+    const card = document.getElementById(cardId);
+    const val  = document.getElementById(valueId);
+    if (cost > 0 && isAdmin) {
+      card.style.display = '';
+      val.textContent = fmtInt(Math.round(cost));
+    } else {
+      card.style.display = 'none';
+    }
+  }
+
+  /* ── Обновляем calcTab1: добавляем расчёт стоимости ── */
+  const _origCalcTab1 = calcTab1;
+  calcTab1 = function() {
+    _origCalcTab1();
+    const mix  = document.getElementById('t1-mix').value;
+    const bags = Math.ceil(getVal('t1-area') * getVal('t1-thick') * (mixRate[mix] || 1.5) / 25);
+    const price = getPrice('mix_' + mix);
+    showCost('t1-r-cost-card', 't1-r-cost', bags * price);
+  };
+
+  /* ── Обновляем calcTab2: добавляем расчёт стоимости ── */
+  const _origCalcTab2 = calcTab2;
+  calcTab2 = function() {
+    _origCalcTab2();
+    const type  = document.getElementById('t2-type').value;
+    const grade = document.getElementById('t2-grade').value;
+    const volM3 = getVal('t2-len') * getVal('t2-wid') * getVal('t2-hei');
+    // Ключ: concrete_М200W2 или pump_М200W2
+    const prefix = type === 'gravel' ? 'concrete_' : 'pump_';
+    const price  = getPrice(prefix + grade);
+    showCost('t2-r-cost-card', 't2-r-cost', volM3 * price);
+  };
+
+  /* ── Обновляем calcTab3: добавляем расчёт стоимости ── */
+  const _origCalcTab3 = calcTab3;
+  calcTab3 = function() {
+    _origCalcTab3();
+    const mat  = document.getElementById('t3-mat').value;
+    const area  = getVal('t3-area');
+    const thick = getVal('t3-thick');
+    const volM3 = area * (thick / 100);
+    const tons  = volM3 * (density[mat] || 1.5);
+    const price = getPrice('inert_' + mat);
+    showCost('t3-r-cost-card', 't3-r-cost', tons * price);
+  };
 </script>
   <!-- Регистрация Service Worker для офлайн -->
   <script>
