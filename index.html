@@ -631,6 +631,16 @@
         <input type="number" id="t3-thick" placeholder="например 20" min="1" step="1" />
         <span class="hint">Подсыпка под фундамент — 20–30 см</span>
       </div>
+      <div class="form-group full">
+        <label>Объём самосвала</label>
+        <select id="t3-truck">
+          <option value="6">6 м³ — малый (ГАЗ, КАМАЗ 6х6)</option>
+          <option value="8">8 м³ — КАМАЗ стандартный</option>
+          <option value="10" selected>10 м³ — КАМАЗ с наращенными бортами</option>
+          <option value="12">12 м³ — КАМАЗ 6520, MAN</option>
+          <option value="20">20 м³ — полуприцеп</option>
+        </select>
+      </div>
     </div>
     <button class="btn-calc" onclick="calcTab3()">Рассчитать</button>
 
@@ -648,7 +658,7 @@
           <div class="result-card__unit">тонн</div>
         </div>
         <div class="result-card accent">
-          <div class="result-card__label">Самосвалов 10 м³</div>
+          <div class="result-card__label" id="t3-r-trucks-label">Самосвалов 10 м³</div>
           <div class="result-card__value" id="t3-r-trucks">—</div>
           <div class="result-card__unit">шт.</div>
         </div>
@@ -871,6 +881,7 @@
     const area  = getVal('t3-area');
     const thick = getVal('t3-thick');
     const mat   = document.getElementById('t3-mat').value;
+    const truckVol = parseFloat(document.getElementById('t3-truck').value) || 10;
 
     if (!area || !thick || area <= 0 || thick <= 0) {
       alert('Пожалуйста, заполните площадь и толщину слоя.'); return;
@@ -878,11 +889,12 @@
 
     const volM3  = area * (thick / 100);
     const tons   = volM3 * (density[mat] || 1.5);
-    const trucks = Math.ceil(volM3 / 10);
+    const trucks = Math.ceil(volM3 / truckVol);
 
     document.getElementById('t3-r-vol').textContent    = fmt(volM3);
     document.getElementById('t3-r-ton').textContent    = fmt(tons);
     document.getElementById('t3-r-trucks').textContent = fmtInt(trucks);
+    document.getElementById('t3-r-trucks-label').textContent = `Самосвалов ${truckVol} м³`;
     document.getElementById('t3-result').classList.add('visible');
 
     calcResults.t3 =
@@ -891,7 +903,7 @@
       `Площадь: ${fmt(area)} м², толщина слоя: ${thick} см\n` +
       `Объём: ${fmt(volM3)} м³\n` +
       `Вес: ${fmt(tons)} т\n` +
-      `Самосвалов (10 м³): ${fmtInt(trucks)} шт.`;
+      `Самосвалов (${truckVol} м³): ${fmtInt(trucks)} шт.`;
   }
 
   /* ── Modal ── */
