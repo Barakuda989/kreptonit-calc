@@ -947,8 +947,12 @@
     if (e.key === 'Escape') closeModal();
   });
 
-  /* ── Admin-режим: ?admin в URL показывает вкладку Цены ── */
-  const isAdmin = new URLSearchParams(window.location.search).has('admin');
+  /* ── Admin-режим: ?admin в URL или ранее активированный ── */
+  // Если открыли с ?admin — запоминаем навсегда на этом устройстве
+  if (new URLSearchParams(window.location.search).has('admin')) {
+    localStorage.setItem('kreptonit_admin', '1');
+  }
+  const isAdmin = localStorage.getItem('kreptonit_admin') === '1';
 
   if (isAdmin) {
     // Показываем вкладку «Цены»
