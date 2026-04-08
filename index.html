@@ -1023,54 +1023,6 @@
     inert_pgs:     850,
   };
 
-  /* ── Дефолтные цены (ориентир по рынку Калининградской области) ── */
-  const DEFAULT_PRICES = {
-    // Сухие смеси — руб. за мешок 25 кг (пока нет прайса)
-    mix_heat_glue:      0,
-    mix_tile_glue:      0,
-    mix_masonry:        0,
-    mix_plaster:        0,
-    mix_deco_plaster:   0,
-    mix_floor_leveling: 0,
-    mix_floor_self:     0,
-    mix_block_glue:     0,
-
-    // Бетон на гравии — руб/м³
-    'concrete_М200W2': 2900,
-    'concrete_М200W4': 3200,
-    'concrete_М200W6': 3270,
-    'concrete_М250':   3200,
-    'concrete_М250W4': 3380,
-    'concrete_М250W6': 3490,
-    'concrete_М250W8': 3690,
-    'concrete_М300':   3600,
-    'concrete_М300W4': 3690,
-    'concrete_М300W6': 4000,
-    'concrete_М300W8': 4100,
-    'concrete_М350':   3700,
-    'concrete_М350W6': 3780,
-    'concrete_М350W8': 3830,
-
-    // Бетон для автобетононасоса — руб/м³
-    'pump_М100':   2700,
-    'pump_М150':   2900,
-    'pump_М200':   3100,
-    'pump_М200W2': 3200,
-    'pump_М200W4': 3400,
-    'pump_М200W6': 3500,
-    'pump_М250':   3400,
-    'pump_М250W2': 3500,
-    'pump_М250W4': 3600,
-    'pump_М250W6': 3700,
-    'pump_М350W8': 4100,
-
-    // Инертные материалы — руб/тонну
-    inert_sand:    300,
-    inert_crushed: 650,
-    inert_gravel:  750,
-    inert_pgs:     850,
-  };
-
   /* ── Сохранение цен в localStorage ── */
   function savePrices() {
     const prices = {};
@@ -1157,5 +1109,11 @@
   };
 
 </script>
+  <!-- Регистрация Service Worker для офлайн -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js');
+    }
+  </script>
 </body>
 </html>
