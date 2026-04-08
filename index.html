@@ -643,14 +643,32 @@
         <label>Марка бетона</label>
         <select id="t2-grade"></select>
       </div>
-      <div class="form-group">
+      <div class="form-group full">
+        <label>Форма заливки</label>
+        <select id="t2-shape" onchange="toggleShape()">
+          <option value="rect">Прямоугольная (плита, фундамент)</option>
+          <option value="cyl">Круглое сечение (колонны, сваи)</option>
+        </select>
+      </div>
+      <!-- Прямоугольник -->
+      <div class="form-group" id="t2-rect-1">
         <label>Длина, м</label>
         <input type="number" id="t2-len" placeholder="например 10" min="0.1" step="0.1" />
       </div>
-      <div class="form-group">
+      <div class="form-group" id="t2-rect-2">
         <label>Ширина, м</label>
         <input type="number" id="t2-wid" placeholder="например 5" min="0.1" step="0.1" />
       </div>
+      <!-- Цилиндр -->
+      <div class="form-group" id="t2-cyl-1" style="display:none">
+        <label>Диаметр, м</label>
+        <input type="number" id="t2-diam" placeholder="например 0.3" min="0.01" step="0.01" />
+      </div>
+      <div class="form-group" id="t2-cyl-2" style="display:none">
+        <label>Количество, шт.</label>
+        <input type="number" id="t2-qty" placeholder="например 8" min="1" step="1" value="1" />
+      </div>
+      <!-- Общее -->
       <div class="form-group">
         <label>Высота (толщина), м</label>
         <input type="number" id="t2-hei" placeholder="например 0.2" min="0.01" step="0.01" />
@@ -698,14 +716,33 @@
           <option value="pgs">ПГС — песчано-гравийная смесь (1,65 т/м³)</option>
         </select>
       </div>
-      <div class="form-group">
+      <div class="form-group full">
+        <label>Способ расчёта</label>
+        <select id="t3-mode" onchange="toggleInertMode()">
+          <option value="area">По площади и толщине слоя</option>
+          <option value="vol">Знаю объём (м³)</option>
+          <option value="tons">Знаю вес (тонны)</option>
+        </select>
+      </div>
+      <!-- Режим: по площади -->
+      <div class="form-group" id="t3-f-area">
         <label>Площадь, м²</label>
         <input type="number" id="t3-area" placeholder="например 100" min="0.1" step="0.1" />
       </div>
-      <div class="form-group">
+      <div class="form-group" id="t3-f-thick">
         <label>Толщина слоя, см</label>
         <input type="number" id="t3-thick" placeholder="например 20" min="1" step="1" />
         <span class="hint">Подсыпка под фундамент — 20–30 см</span>
+      </div>
+      <!-- Режим: по объёму -->
+      <div class="form-group" id="t3-f-vol" style="display:none">
+        <label>Объём, м³</label>
+        <input type="number" id="t3-vol-input" placeholder="например 15" min="0.1" step="0.1" />
+      </div>
+      <!-- Режим: по весу -->
+      <div class="form-group" id="t3-f-tons" style="display:none">
+        <label>Вес, тонн</label>
+        <input type="number" id="t3-tons-input" placeholder="например 20" min="0.1" step="0.1" />
       </div>
       <div class="form-group full">
         <label>Объём самосвала</label>
@@ -947,20 +984,46 @@
 
   updateGrades(); // инициализация при загрузке
 
-  function calcTab2() {
-    const len  = getVal('t2-len');
-    const wid  = getVal('t2-wid');
-    const hei  = getVal('t2-hei');
-    const type = document.getElementById('t2-type').value;
-    const typeName = document.getElementById('t2-type').options[document.getElementById('t2-type').selectedIndex].text;
-    const grade = document.getElementById('t2-grade').value;
-    const reserve = document.getElementById('t2-reserve').checked ? 1.1 : 1;
+  /* ── Переключатель формы заливки ── */
+  function toggleShape() {
+    const shape = document.getElementById('t2-shape').value;
+    const isRect = shape === 'rect';
+    document.getElementById('t2-rect-1').style.display = isRect ? '' : 'none';
+    document.getElementById('t2-rect-2').style.display = isRect ? '' : 'none';
+    document.getElementById('t2-cyl-1').style.display  = isRect ? 'none' : '';
+    document.getElementById('t2-cyl-2').style.display  = isRect ? 'none' : '';
+  }
 
-    if (!len || !wid || !hei || len <= 0 || wid <= 0 || hei <= 0) {
-      alert('Пожалуйста, заполните длину, ширину и высоту.'); return;
+  function calcTab2() {
+    const shape = document.getElementById('t2-shape').value;
+    const hei   = getVal('t2-hei');
+    const type  = document.getElementById('t2-type').value;
+    const typeName = document.getElementById('t2-type').options[document.getElementById('t2-type').selectedIndex].text;
+    const grade   = document.getElementById('t2-grade').value;
+    const reserve = document.getElementById('t2-reserve').checked ? 1.1 : 1;
+    let volM3, sizeText;
+
+    if (shape === 'rect') {
+      /* Прямоугольная заливка */
+      const len = getVal('t2-len');
+      const wid = getVal('t2-wid');
+      if (!len || !wid || !hei || len <= 0 || wid <= 0 || hei <= 0) {
+        alert('Пожалуйста, заполните длину, ширину и высоту.'); return;
+      }
+      volM3 = len * wid * hei * reserve;
+      sizeText = `Размеры: ${fmt(len)} × ${fmt(wid)} × ${fmt(hei)} м`;
+    } else {
+      /* Круглое сечение (цилиндр) */
+      const diam = getVal('t2-diam');
+      const qty  = parseInt(document.getElementById('t2-qty').value) || 1;
+      if (!diam || !hei || diam <= 0 || hei <= 0) {
+        alert('Пожалуйста, заполните диаметр и высоту.'); return;
+      }
+      const r = diam / 2;
+      volM3 = Math.PI * r * r * hei * qty * reserve;
+      sizeText = `Диаметр: ${fmt(diam)} м, высота: ${fmt(hei)} м, кол-во: ${qty} шт.`;
     }
 
-    const volM3  = len * wid * hei * reserve;
     const mixers = Math.ceil(volM3 / 7);
 
     document.getElementById('t2-r-vol').textContent    = fmt(volM3);
@@ -968,11 +1031,13 @@
     document.getElementById('t2-result').classList.add('visible');
 
     const reserveText = reserve > 1 ? ' (с запасом 10%)' : '';
+    const shapeName   = shape === 'rect' ? 'Прямоугольная' : 'Круглое сечение';
     calcResults.t2 =
       `Расчёт: Бетон${reserveText}\n` +
       `Тип: ${typeName}\n` +
       `Марка: ${grade}\n` +
-      `Размеры: ${fmt(len)} × ${fmt(wid)} × ${fmt(hei)} м → объём: ${fmt(volM3)} м³\n` +
+      `Форма: ${shapeName}\n` +
+      `${sizeText} → объём: ${fmt(volM3)} м³\n` +
       `Миксеров (7 м³): ${fmtInt(mixers)} шт.`;
   }
 
@@ -980,19 +1045,50 @@
   const density     = { sand: 1.5, crushed: 1.4, gravel: 1.6, pgs: 1.65 };
   const matNames    = { sand: 'Песок', crushed: 'Щебень', gravel: 'Гравий', pgs: 'ПГС' };
 
-  function calcTab3() {
-    const area  = getVal('t3-area');
-    const thick = getVal('t3-thick');
-    const mat   = document.getElementById('t3-mat').value;
-    const truckVol = parseFloat(document.getElementById('t3-truck').value) || 10;
-    const reserve = document.getElementById('t3-reserve').checked ? 1.1 : 1;
+  /* ── Переключатель режима ввода инертных ── */
+  function toggleInertMode() {
+    const mode = document.getElementById('t3-mode').value;
+    document.getElementById('t3-f-area').style.display  = mode === 'area' ? '' : 'none';
+    document.getElementById('t3-f-thick').style.display  = mode === 'area' ? '' : 'none';
+    document.getElementById('t3-f-vol').style.display    = mode === 'vol'  ? '' : 'none';
+    document.getElementById('t3-f-tons').style.display   = mode === 'tons' ? '' : 'none';
+  }
 
-    if (!area || !thick || area <= 0 || thick <= 0) {
-      alert('Пожалуйста, заполните площадь и толщину слоя.'); return;
+  function calcTab3() {
+    const mode     = document.getElementById('t3-mode').value;
+    const mat      = document.getElementById('t3-mat').value;
+    const truckVol = parseFloat(document.getElementById('t3-truck').value) || 10;
+    const reserve  = document.getElementById('t3-reserve').checked ? 1.1 : 1;
+    const d        = density[mat] || 1.5;
+    let volM3, tons, inputText;
+
+    if (mode === 'area') {
+      const area  = getVal('t3-area');
+      const thick = getVal('t3-thick');
+      if (!area || !thick || area <= 0 || thick <= 0) {
+        alert('Пожалуйста, заполните площадь и толщину слоя.'); return;
+      }
+      volM3 = area * (thick / 100) * reserve;
+      tons  = volM3 * d;
+      inputText = `Площадь: ${fmt(area)} м², толщина слоя: ${thick} см`;
+    } else if (mode === 'vol') {
+      const v = getVal('t3-vol-input');
+      if (!v || v <= 0) {
+        alert('Пожалуйста, введите объём.'); return;
+      }
+      volM3 = v * reserve;
+      tons  = volM3 * d;
+      inputText = `Объём: ${fmt(v)} м³`;
+    } else {
+      const t = getVal('t3-tons-input');
+      if (!t || t <= 0) {
+        alert('Пожалуйста, введите вес.'); return;
+      }
+      tons  = t * reserve;
+      volM3 = tons / d;
+      inputText = `Вес: ${fmt(t)} т`;
     }
 
-    const volM3  = area * (thick / 100) * reserve;
-    const tons   = volM3 * (density[mat] || 1.5);
     const trucks = Math.ceil(volM3 / truckVol);
 
     document.getElementById('t3-r-vol').textContent    = fmt(volM3);
@@ -1004,8 +1100,8 @@
     const reserveText = reserve > 1 ? ' (с запасом 10%)' : '';
     calcResults.t3 =
       `Расчёт: Инертные материалы${reserveText}\n` +
-      `Материал: ${matNames[mat]} (плотность ${density[mat]} т/м³)\n` +
-      `Площадь: ${fmt(area)} м², толщина слоя: ${thick} см\n` +
+      `Материал: ${matNames[mat]} (плотность ${d} т/м³)\n` +
+      `${inputText}\n` +
       `Объём: ${fmt(volM3)} м³\n` +
       `Вес: ${fmt(tons)} т\n` +
       `Самосвалов (${truckVol} м³): ${fmtInt(trucks)} шт.`;
@@ -1202,12 +1298,21 @@
   const _origCalcTab2 = calcTab2;
   calcTab2 = function() {
     _origCalcTab2();
+    const shape   = document.getElementById('t2-shape').value;
     const type    = document.getElementById('t2-type').value;
     const grade   = document.getElementById('t2-grade').value;
     const reserve = document.getElementById('t2-reserve').checked ? 1.1 : 1;
-    const volM3   = getVal('t2-len') * getVal('t2-wid') * getVal('t2-hei') * reserve;
-    const prefix  = type === 'gravel' ? 'concrete_' : 'pump_';
-    const price   = getPrice(prefix + grade);
+    const hei     = getVal('t2-hei');
+    let volM3;
+    if (shape === 'rect') {
+      volM3 = getVal('t2-len') * getVal('t2-wid') * hei * reserve;
+    } else {
+      const r   = getVal('t2-diam') / 2;
+      const qty = parseInt(document.getElementById('t2-qty').value) || 1;
+      volM3 = Math.PI * r * r * hei * qty * reserve;
+    }
+    const prefix = type === 'gravel' ? 'concrete_' : 'pump_';
+    const price  = getPrice(prefix + grade);
     showCost('t2-r-cost-card', 't2-r-cost', volM3 * price);
   };
 
@@ -1215,11 +1320,20 @@
   const _origCalcTab3 = calcTab3;
   calcTab3 = function() {
     _origCalcTab3();
+    const mode    = document.getElementById('t3-mode').value;
     const mat     = document.getElementById('t3-mat').value;
     const reserve = document.getElementById('t3-reserve').checked ? 1.1 : 1;
-    const volM3   = getVal('t3-area') * (getVal('t3-thick') / 100) * reserve;
-    const tons    = volM3 * (density[mat] || 1.5);
-    const price   = getPrice('inert_' + mat);
+    const d       = density[mat] || 1.5;
+    let tons;
+    if (mode === 'area') {
+      const volM3 = getVal('t3-area') * (getVal('t3-thick') / 100) * reserve;
+      tons = volM3 * d;
+    } else if (mode === 'vol') {
+      tons = getVal('t3-vol-input') * reserve * d;
+    } else {
+      tons = getVal('t3-tons-input') * reserve;
+    }
+    const price = getPrice('inert_' + mat);
     showCost('t3-r-cost-card', 't3-r-cost', tons * price);
   };
 
