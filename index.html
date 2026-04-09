@@ -14,7 +14,6 @@
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>emailjs.init("K4Bp3BF4bc1Jq8TH9");</script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1183,10 +1182,38 @@
       `Самосвалов (${truckVol} м³): ${fmtInt(trucks)} шт.`;
   }
 
-  /* ── PDF-выгрузка расчёта ── */
-  function downloadPDF(tab) {
+  /* ── PDF-выгрузка расчёта (ленивая загрузка jsPDF) ── */
+  const pdfCDNs = [
+    'https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js',
+    'https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js',
+  ];
+
+  function loadJsPDF() {
+    return new Promise((resolve, reject) => {
+      if (window.jspdf) { resolve(); return; }
+      let i = 0;
+      function tryNext() {
+        if (i >= pdfCDNs.length) { reject('Не удалось загрузить библиотеку PDF'); return; }
+        const s = document.createElement('script');
+        s.src = pdfCDNs[i++];
+        s.onload = () => window.jspdf ? resolve() : tryNext();
+        s.onerror = tryNext;
+        document.head.appendChild(s);
+      }
+      tryNext();
+    });
+  }
+
+  async function downloadPDF(tab) {
     const text = calcResults[tab];
     if (!text) { alert('Сначала выполните расчёт.'); return; }
+
+    try {
+      await loadJsPDF();
+    } catch(e) {
+      alert('Не удалось загрузить PDF. Проверьте интернет.'); return;
+    }
 
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ unit: 'mm', format: 'a4' });
