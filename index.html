@@ -1219,10 +1219,13 @@
 </div>
 </body></html>`;
 
-    const w = window.open('', '_blank');
-    w.document.write(html);
-    w.document.close();
-    w.onload = function() { w.print(); };
+    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const w = window.open(url, '_blank');
+    w.onload = function() {
+      w.print();
+      URL.revokeObjectURL(url);
+    };
   }
 
   /* ── Modal ── */
