@@ -681,7 +681,7 @@
         </div>
       </div>
       <button class="btn-request" onclick="openModal('t1')">📞 Получить расчёт за 5 минут</button>
-      <button class="btn-pdf" onclick="downloadPDF('t1')">📄 Скачать расчёт PDF</button>
+      <button class="btn-pdf" onclick="downloadPDF('t1')">📄 Сохранить расчёт в PDF</button>
     </div>
   </div>
 
@@ -773,7 +773,7 @@
       <p class="delivery-note">Доставка — 1&nbsp;150 руб/час.&nbsp;&nbsp;Автобетононасос — 2&nbsp;500 руб/час</p>
       <p class="delivery-note" id="t2-small-vol" style="display:none;border-color:#e74c3c;background:rgba(231,76,60,.08)">⚠ При объёме менее 1 м³ доставка миксером нецелесообразна. Рекомендуем ручной замес или позвоните: <a href="tel:84014334474" style="color:var(--orange);font-weight:700">8 (40143) 34474</a></p>
       <button class="btn-request" onclick="openModal('t2')">📞 Получить расчёт за 5 минут</button>
-      <button class="btn-pdf" onclick="downloadPDF('t2')">📄 Скачать расчёт PDF</button>
+      <button class="btn-pdf" onclick="downloadPDF('t2')">📄 Сохранить расчёт в PDF</button>
     </div>
   </div>
 
@@ -859,7 +859,7 @@
         </div>
       </div>
       <button class="btn-request" onclick="openModal('t3')">📞 Получить расчёт за 5 минут</button>
-      <button class="btn-pdf" onclick="downloadPDF('t3')">📄 Скачать расчёт PDF</button>
+      <button class="btn-pdf" onclick="downloadPDF('t3')">📄 Сохранить расчёт в PDF</button>
     </div>
   </div>
 
@@ -1182,89 +1182,47 @@
       `Самосвалов (${truckVol} м³): ${fmtInt(trucks)} шт.`;
   }
 
-  /* ── PDF-выгрузка расчёта (ленивая загрузка jsPDF) ── */
-  const pdfCDNs = [
-    'https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js',
-    'https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js',
-  ];
-
-  function loadJsPDF() {
-    return new Promise((resolve, reject) => {
-      if (window.jspdf) { resolve(); return; }
-      let i = 0;
-      function tryNext() {
-        if (i >= pdfCDNs.length) { reject('Не удалось загрузить библиотеку PDF'); return; }
-        const s = document.createElement('script');
-        s.src = pdfCDNs[i++];
-        s.onload = () => window.jspdf ? resolve() : tryNext();
-        s.onerror = tryNext;
-        document.head.appendChild(s);
-      }
-      tryNext();
-    });
-  }
-
-  async function downloadPDF(tab) {
+  /* ── PDF-выгрузка расчёта (через окно печати браузера) ── */
+  function downloadPDF(tab) {
     const text = calcResults[tab];
     if (!text) { alert('Сначала выполните расчёт.'); return; }
 
-    try {
-      await loadJsPDF();
-    } catch(e) {
-      alert('Не удалось загрузить PDF. Проверьте интернет.'); return;
-    }
-
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
-
-    // Заголовок
-    doc.setFontSize(18);
-    doc.setTextColor(26, 54, 93);
-    doc.text('Крептонит — Расчёт материалов', 20, 25);
-
-    // Линия
-    doc.setDrawColor(230, 126, 34);
-    doc.setLineWidth(0.8);
-    doc.line(20, 30, 190, 30);
-
-    // Дата
-    doc.setFontSize(10);
-    doc.setTextColor(107, 122, 141);
     const today = new Date().toLocaleDateString('ru-RU');
-    doc.text('Дата расчёта: ' + today, 20, 38);
+    const lines = text.split('\n').map(l => '<p style="margin:4px 0;font-size:15px">' + l + '</p>').join('');
 
-    // Результат расчёта
-    doc.setFontSize(12);
-    doc.setTextColor(26, 42, 58);
-    const lines = text.split('\n');
-    let y = 50;
-    lines.forEach(line => {
-      doc.text(line, 20, y);
-      y += 8;
-    });
+    const html = `<!DOCTYPE html>
+<html lang="ru"><head><meta charset="UTF-8"/>
+<title>Расчёт — Крептонит</title>
+<style>
+  body{font-family:'Segoe UI',Arial,sans-serif;padding:40px;color:#1a2a3a;max-width:700px;margin:0 auto}
+  .header{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+  .logo{width:44px;height:44px;background:#e67e22;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#fff}
+  h1{font-size:20px;color:#1a365d;margin:0}
+  h1 span{color:#e67e22;font-size:14px;display:block;font-weight:600}
+  .line{height:3px;background:#e67e22;border-radius:2px;margin:14px 0}
+  .date{font-size:13px;color:#6b7a8d;margin-bottom:20px}
+  .result{background:#f0f4f8;border-left:4px solid #e67e22;padding:18px 20px;border-radius:0 8px 8px 0;margin-bottom:24px}
+  .contacts{border-top:2px solid #d0dae6;padding-top:16px;margin-top:20px}
+  .contacts h3{color:#1a365d;font-size:16px;margin-bottom:8px}
+  .contacts p{font-size:14px;color:#6b7a8d;margin:3px 0}
+  @media print{body{padding:20px}}
+</style></head><body>
+<div class="header"><div class="logo">К</div><h1>Крептонит<span>Расчёт материалов</span></h1></div>
+<div class="line"></div>
+<div class="date">Дата расчёта: ${today}</div>
+<div class="result">${lines}</div>
+<div class="contacts">
+  <h3>ГК «Эдиль» — завод «Крептонит»</h3>
+  <p>Тел: +7 921 617-49-20 · Заказы: 8 (40143) 34474</p>
+  <p>E-mail: gusevcement@yandex.ru</p>
+  <p>Адрес: Калининградская обл., г. Гусев, ул. Победы, 51</p>
+</div>
+</body></html>`;
 
-    // Контакты
-    y += 10;
-    doc.setDrawColor(208, 218, 230);
-    doc.setLineWidth(0.3);
-    doc.line(20, y, 190, y);
-    y += 10;
-    doc.setFontSize(11);
-    doc.setTextColor(26, 54, 93);
-    doc.text('ГК «Эдиль» — завод «Крептонит»', 20, y);
-    y += 7;
-    doc.setFontSize(10);
-    doc.setTextColor(107, 122, 141);
-    doc.text('Тел: +7 921 617-49-20 · Заказы: 8 (40143) 34474', 20, y);
-    y += 6;
-    doc.text('E-mail: gusevcement@yandex.ru', 20, y);
-    y += 6;
-    doc.text('Адрес: Калининградская обл., г. Гусев, ул. Победы, 51', 20, y);
-
-    // Сохраняем
-    const names = { t1: 'suhie-smesi', t2: 'beton', t3: 'inertnye' };
-    doc.save('kreptonit-raschet-' + (names[tab] || tab) + '.pdf');
+    const w = window.open('', '_blank');
+    w.document.write(html);
+    w.document.close();
+    w.onload = function() { w.print(); };
   }
 
   /* ── Modal ── */
