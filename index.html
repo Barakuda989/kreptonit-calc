@@ -660,6 +660,10 @@
         <input type="number" id="t1-bulk-kg" placeholder="например 560 или 2640" min="1" step="1" />
         <span class="hint">Если заполнено — площадь и толщина игнорируются</span>
       </div>
+      <div class="form-group" id="t1-f-bulk-price" style="display:none">
+        <label>Цена за тонну, руб.</label>
+        <input type="number" id="t1-bulk-price" placeholder="например 5000" min="0" step="1" />
+      </div>
       <div class="reserve-row">
         <input type="checkbox" id="t1-reserve" />
         <label for="t1-reserve">Добавить 10% запас на потери</label>
@@ -1060,7 +1064,9 @@
   /* ── Переключатель поля ввода веса (валом) ── */
   function toggleBulkWeight() {
     const val = document.getElementById('t1-bag').value;
-    document.getElementById('t1-f-bulk').style.display = val === '0' ? '' : 'none';
+    const show = val === '0';
+    document.getElementById('t1-f-bulk').style.display = show ? '' : 'none';
+    document.getElementById('t1-f-bulk-price').style.display = show ? '' : 'none';
   }
 
   function calcTab1() {
@@ -1519,6 +1525,7 @@
     const bagSize = parseFloat(document.getElementById('t1-bag').value);
     const reserve = document.getElementById('t1-reserve').checked ? 1.1 : 1;
     const bulkKg  = parseFloat(document.getElementById('t1-bulk-kg').value);
+    const customPrice = parseFloat(document.getElementById('t1-bulk-price').value);
     let totalKg;
     if (bagSize === 0 && bulkKg > 0) {
       totalKg = bulkKg * reserve;
@@ -1526,15 +1533,23 @@
       totalKg = getVal('t1-area') * getVal('t1-thick') * (mixRate[mix] || 1.5) * reserve;
     }
     let cost = 0;
-    if (bagSize === 50) {
+    if (bagSize === 0 && customPrice > 0) {
+      /* Свободная цена за тонну — показываем всем */
+      cost = (totalKg / 1000) * customPrice;
+      const card = document.getElementById('t1-r-cost-card');
+      const val  = document.getElementById('t1-r-cost');
+      card.style.display = '';
+      val.textContent = fmtInt(Math.round(cost));
+    } else if (bagSize === 50) {
       cost = Math.ceil(totalKg / 50) * getPrice('mix50_' + mix);
+      showCost('t1-r-cost-card', 't1-r-cost', cost);
     } else if (bagSize === 25) {
       cost = Math.ceil(totalKg / 25) * getPrice('mix_' + mix);
+      showCost('t1-r-cost-card', 't1-r-cost', cost);
     } else {
-      /* Валом — цена за тонну */
       cost = (totalKg / 1000) * getPrice('bulk_' + mix);
+      showCost('t1-r-cost-card', 't1-r-cost', cost);
     }
-    showCost('t1-r-cost-card', 't1-r-cost', cost);
   };
 
   /* ── Обновляем calcTab2: добавляем расчёт стоимости ── */
