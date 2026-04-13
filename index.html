@@ -914,14 +914,14 @@
     </div>
     <div class="price-section">
       <h3>Сухие смеси — россыпью (валом), цена за тонну</h3>
-      <div class="price-row"><label>Клей для теплоизоляции</label><input type="number" data-price="bulk_heat_glue" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
-      <div class="price-row"><label>Клей для плитки</label><input type="number" data-price="bulk_tile_glue" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
-      <div class="price-row"><label>Кладочная смесь</label><input type="number" data-price="bulk_masonry" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
-      <div class="price-row"><label>Штукатурная смесь</label><input type="number" data-price="bulk_plaster" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
-      <div class="price-row"><label>Декоративная штукатурка</label><input type="number" data-price="bulk_deco_plaster" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
-      <div class="price-row"><label>Напольная выравнивающая</label><input type="number" data-price="bulk_floor_leveling" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
-      <div class="price-row"><label>Напольная самовыравнивающая</label><input type="number" data-price="bulk_floor_self" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
-      <div class="price-row"><label>Клей для блоков</label><input type="number" data-price="bulk_block_glue" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Клей для теплоизоляции</label><input type="number" data-price="bulk_heat_glue" placeholder="0" min="0" oninput="showPerKg(this)" /><span class="price-unit">руб/т</span><span class="price-unit" style="color:var(--orange);min-width:80px"></span></div>
+      <div class="price-row"><label>Клей для плитки</label><input type="number" data-price="bulk_tile_glue" placeholder="0" min="0" oninput="showPerKg(this)" /><span class="price-unit">руб/т</span><span class="price-unit" style="color:var(--orange);min-width:80px"></span></div>
+      <div class="price-row"><label>Кладочная смесь</label><input type="number" data-price="bulk_masonry" placeholder="0" min="0" oninput="showPerKg(this)" /><span class="price-unit">руб/т</span><span class="price-unit" style="color:var(--orange);min-width:80px"></span></div>
+      <div class="price-row"><label>Штукатурная смесь</label><input type="number" data-price="bulk_plaster" placeholder="0" min="0" oninput="showPerKg(this)" /><span class="price-unit">руб/т</span><span class="price-unit" style="color:var(--orange);min-width:80px"></span></div>
+      <div class="price-row"><label>Декоративная штукатурка</label><input type="number" data-price="bulk_deco_plaster" placeholder="0" min="0" oninput="showPerKg(this)" /><span class="price-unit">руб/т</span><span class="price-unit" style="color:var(--orange);min-width:80px"></span></div>
+      <div class="price-row"><label>Напольная выравнивающая</label><input type="number" data-price="bulk_floor_leveling" placeholder="0" min="0" oninput="showPerKg(this)" /><span class="price-unit">руб/т</span><span class="price-unit" style="color:var(--orange);min-width:80px"></span></div>
+      <div class="price-row"><label>Напольная самовыравнивающая</label><input type="number" data-price="bulk_floor_self" placeholder="0" min="0" oninput="showPerKg(this)" /><span class="price-unit">руб/т</span><span class="price-unit" style="color:var(--orange);min-width:80px"></span></div>
+      <div class="price-row"><label>Клей для блоков</label><input type="number" data-price="bulk_block_glue" placeholder="0" min="0" oninput="showPerKg(this)" /><span class="price-unit">руб/т</span><span class="price-unit" style="color:var(--orange);min-width:80px"></span></div>
       <!-- Мини-калькулятор валом -->
       <div style="margin-top:16px;padding-top:14px;border-top:2px solid var(--bg)">
         <div class="price-row">
@@ -1466,6 +1466,21 @@
   };
 
   /* ── Сохранение цен в localStorage ── */
+  /* ── Авто-показ цены за кг рядом с ценой за тонну ── */
+  function showPerKg(inp) {
+    const val = parseFloat(inp.value) || 0;
+    /* Второй span после input — для показа руб/кг */
+    const spans = inp.parentElement.querySelectorAll('.price-unit');
+    if (spans.length >= 2) {
+      spans[1].textContent = val > 0 ? `= ${(val / 1000).toFixed(2)} руб/кг` : '';
+    }
+  }
+
+  /* ── При загрузке цен — обновить подсказки руб/кг ── */
+  function refreshPerKg() {
+    document.querySelectorAll('[data-price^="bulk_"]').forEach(inp => showPerKg(inp));
+  }
+
   /* ── Мини-калькулятор валом (во вкладке Цены) ── */
   function calcBulkPrices() {
     const kg = parseFloat(document.getElementById('bulk-calc-kg').value);
@@ -1481,13 +1496,14 @@
       ['bulk_floor_self',     'Напольная самовыравнивающая'],
       ['bulk_block_glue',     'Клей для блоков'],
     ];
-    let html = `<strong>${fmt(kg)} кг = ${fmt(tons)} т</strong><br><br>`;
+    let html = `<strong>${fmtInt(kg)} кг = ${fmt(tons)} т</strong><br><br>`;
     items.forEach(([key, name]) => {
       const inp = document.querySelector(`[data-price="${key}"]`);
-      const price = inp ? parseFloat(inp.value) || 0 : 0;
-      if (price > 0) {
-        const cost = Math.round(tons * price);
-        html += `${name}: <strong>${fmtInt(cost)} руб.</strong> (${fmtInt(price)} руб/т)<br>`;
+      const priceT = inp ? parseFloat(inp.value) || 0 : 0;
+      if (priceT > 0) {
+        const priceKg = priceT / 1000;
+        const cost = Math.round(kg * priceKg);
+        html += `${name}: <strong>${fmtInt(cost)} руб.</strong> (${fmtInt(kg)} кг × ${priceKg.toFixed(2)} руб/кг)<br>`;
       } else {
         html += `${name}: <span style="color:var(--muted)">цена не указана</span><br>`;
       }
@@ -1543,6 +1559,7 @@
     document.getElementById('tab-prices').style.display = '';
     document.getElementById('tab3').style.display = '';
     loadPrices();
+    refreshPerKg();
   }
 
   /* ── Показать стоимость в карточке ── */
