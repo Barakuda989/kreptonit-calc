@@ -1,7 +1,7 @@
 // Service Worker — Крептонит Калькуляторы
 // Кэширует все файлы для работы офлайн на Android
 
-const CACHE_NAME = 'kreptonit-v19';
+const CACHE_NAME = 'kreptonit-v20';
 
 // Файлы для кэширования при установке
 const FILES_TO_CACHE = [

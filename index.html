@@ -649,11 +649,16 @@
       </div>
       <div class="form-group">
         <label>Фасовка</label>
-        <select id="t1-bag">
+        <select id="t1-bag" onchange="toggleBulkWeight()">
           <option value="25">Мешок 25 кг</option>
           <option value="50">Мешок 50 кг</option>
           <option value="0">Россыпью (валом)</option>
         </select>
+      </div>
+      <div class="form-group full" id="t1-f-bulk" style="display:none">
+        <label>Или введите нужный вес, кг</label>
+        <input type="number" id="t1-bulk-kg" placeholder="например 560 или 2640" min="1" step="1" />
+        <span class="hint">Если заполнено — площадь и толщина игнорируются</span>
       </div>
       <div class="reserve-row">
         <input type="checkbox" id="t1-reserve" />
@@ -1052,20 +1057,34 @@
     document.getElementById('t1-hint').textContent = mixHints[this.value] || '';
   });
 
+  /* ── Переключатель поля ввода веса (валом) ── */
+  function toggleBulkWeight() {
+    const val = document.getElementById('t1-bag').value;
+    document.getElementById('t1-f-bulk').style.display = val === '0' ? '' : 'none';
+  }
+
   function calcTab1() {
-    const area  = getVal('t1-area');
-    const thick = getVal('t1-thick');
-    const mix   = document.getElementById('t1-mix').value;
+    const mix     = document.getElementById('t1-mix').value;
     const mixName = document.getElementById('t1-mix').options[document.getElementById('t1-mix').selectedIndex].text;
     const bagSize = parseFloat(document.getElementById('t1-bag').value);
     const reserve = document.getElementById('t1-reserve').checked ? 1.1 : 1;
-
-    if (!area || !thick || area <= 0 || thick <= 0) {
-      alert('Пожалуйста, заполните площадь и толщину слоя.'); return;
-    }
-
     const rate    = mixRate[mix] || 1.5;
-    const totalKg = area * thick * rate * reserve;
+    let totalKg, inputText;
+
+    /* Валом + свой вес — берём из поля напрямую */
+    const bulkKg = parseFloat(document.getElementById('t1-bulk-kg').value);
+    if (bagSize === 0 && bulkKg > 0) {
+      totalKg   = bulkKg * reserve;
+      inputText = `Свой вес: ${fmt(bulkKg)} кг`;
+    } else {
+      const area  = getVal('t1-area');
+      const thick = getVal('t1-thick');
+      if (!area || !thick || area <= 0 || thick <= 0) {
+        alert('Пожалуйста, заполните площадь и толщину слоя.'); return;
+      }
+      totalKg   = area * thick * rate * reserve;
+      inputText = `Площадь: ${fmt(area)} м², толщина слоя: ${thick} мм`;
+    }
 
     document.getElementById('t1-r-kg').textContent = fmt(totalKg);
 
@@ -1079,7 +1098,7 @@
       calcResults.t1 =
         `Расчёт: Сухие смеси${reserveText}\n` +
         `Тип смеси: ${mixName}\n` +
-        `Площадь: ${fmt(area)} м², толщина слоя: ${thick} мм\n` +
+        `${inputText}\n` +
         `Расход: ${fmt(totalKg)} кг (${fmtInt(bags)} меш. по ${bagSize} кг)`;
     } else {
       /* Россыпью (валом) — показываем тонны */
@@ -1090,7 +1109,7 @@
       calcResults.t1 =
         `Расчёт: Сухие смеси (валом)${reserveText}\n` +
         `Тип смеси: ${mixName}\n` +
-        `Площадь: ${fmt(area)} м², толщина слоя: ${thick} мм\n` +
+        `${inputText}\n` +
         `Расход: ${fmt(totalKg)} кг (${fmt(tons)} т)`;
     }
     document.getElementById('t1-result').classList.add('visible');
@@ -1499,7 +1518,13 @@
     const mix     = document.getElementById('t1-mix').value;
     const bagSize = parseFloat(document.getElementById('t1-bag').value);
     const reserve = document.getElementById('t1-reserve').checked ? 1.1 : 1;
-    const totalKg = getVal('t1-area') * getVal('t1-thick') * (mixRate[mix] || 1.5) * reserve;
+    const bulkKg  = parseFloat(document.getElementById('t1-bulk-kg').value);
+    let totalKg;
+    if (bagSize === 0 && bulkKg > 0) {
+      totalKg = bulkKg * reserve;
+    } else {
+      totalKg = getVal('t1-area') * getVal('t1-thick') * (mixRate[mix] || 1.5) * reserve;
+    }
     let cost = 0;
     if (bagSize === 50) {
       cost = Math.ceil(totalKg / 50) * getPrice('mix50_' + mix);
