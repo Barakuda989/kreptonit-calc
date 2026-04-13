@@ -797,14 +797,15 @@
     <div class="form-grid">
       <div class="form-group full">
         <label>Материал</label>
-        <select id="t3-mat">
-          <option value="sand">Песок (насыпная плотность 1,5 т/м³)</option>
-          <option value="crushed">Щебень (насыпная плотность 1,4 т/м³)</option>
-          <option value="gravel">Гравий (насыпная плотность 1,6 т/м³)</option>
-          <option value="pgs">ПГС — песчано-гравийная смесь (1,65 т/м³)</option>
-          <option value="shchpgs">ЩПГС — щебёночно-песчано-гравийная (1,7 т/м³)</option>
-          <option value="shchgp">ЩГП — щебёночно-гравийно-песчаная (1,65 т/м³)</option>
+        <select id="t3-mat" onchange="updateMatHint()">
+          <option value="sand">Песок</option>
+          <option value="crushed">Щебень</option>
+          <option value="gravel">Гравий</option>
+          <option value="pgs">ПГС — песчано-гравийная смесь</option>
+          <option value="shchpgs">ЩПГС — щебёночно-песчано-гравийная</option>
+          <option value="shchgp">ЩГП — щебёночно-гравийно-песчаная</option>
         </select>
+        <span class="hint" id="t3-mat-hint">1 м³ = 1,5 т (для расчёта количества машин)</span>
       </div>
       <div class="form-group full">
         <label>Способ расчёта</label>
@@ -1209,6 +1210,13 @@
   /* ── TAB 3: Инертные материалы ── */
   const density     = { sand: 1.5, crushed: 1.4, gravel: 1.6, pgs: 1.65, shchpgs: 1.7, shchgp: 1.65 };
   const matNames    = { sand: 'Песок', crushed: 'Щебень', gravel: 'Гравий', pgs: 'ПГС', shchpgs: 'ЩПГС', shchgp: 'ЩГП' };
+
+  /* Подсказка: сколько тонн в 1 м³ */
+  function updateMatHint() {
+    const mat = document.getElementById('t3-mat').value;
+    const d = density[mat] || 1.5;
+    document.getElementById('t3-mat-hint').textContent = `1 м³ = ${d.toFixed(2).replace('.', ',')} т (для расчёта количества машин)`;
+  }
 
   /* ── Переключатель режима ввода инертных ── */
   function toggleInertMode() {
