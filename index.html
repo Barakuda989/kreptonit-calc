@@ -827,7 +827,7 @@
       </div>
       <div class="form-group full">
         <label>Объём самосвала</label>
-        <select id="t3-truck">
+        <select id="t3-truck" onchange="toggleCustomTruck()">
           <option value="6">6 м³ — малый (ГАЗ, КАМАЗ 6х6)</option>
           <option value="8">8 м³ — КАМАЗ стандартный</option>
           <option value="10" selected>10 м³ — КАМАЗ с наращенными бортами</option>
@@ -835,7 +835,12 @@
           <option value="20">20 м³ — полуприцеп</option>
           <option value="t30">30 т — с прицепом</option>
           <option value="t40">40 т — автопоезд</option>
+          <option value="custom">Свой тоннаж ↓</option>
         </select>
+      </div>
+      <div class="form-group" id="t3-f-custom" style="display:none">
+        <label>Тоннаж машины, т</label>
+        <input type="number" id="t3-custom-tons" placeholder="например 25.5" min="0.1" step="0.1" />
       </div>
       <div class="reserve-row">
         <input type="checkbox" id="t3-reserve" />
@@ -1180,12 +1185,27 @@
     document.getElementById('t3-f-tons').style.display   = mode === 'tons' ? '' : 'none';
   }
 
+  /* ── Переключатель свободного тоннажа ── */
+  function toggleCustomTruck() {
+    const val = document.getElementById('t3-truck').value;
+    document.getElementById('t3-f-custom').style.display = val === 'custom' ? '' : 'none';
+  }
+
   function calcTab3() {
     const mode     = document.getElementById('t3-mode').value;
     const mat      = document.getElementById('t3-mat').value;
-    const truckVal = document.getElementById('t3-truck').value;
+    let   truckVal = document.getElementById('t3-truck').value;
     const reserve  = document.getElementById('t3-reserve').checked ? 1.1 : 1;
     const d        = density[mat] || 1.5;
+
+    /* Если выбран «Свой тоннаж» — берём значение из поля */
+    if (truckVal === 'custom') {
+      const ct = parseFloat(document.getElementById('t3-custom-tons').value);
+      if (!ct || ct <= 0) {
+        alert('Пожалуйста, введите тоннаж машины.'); return;
+      }
+      truckVal = 't' + ct;
+    }
     let volM3, tons, inputText;
 
     if (mode === 'area') {
