@@ -652,6 +652,7 @@
         <select id="t1-bag">
           <option value="25">Мешок 25 кг</option>
           <option value="50">Мешок 50 кг</option>
+          <option value="0">Россыпью (валом)</option>
         </select>
       </div>
       <div class="reserve-row">
@@ -672,7 +673,7 @@
         <div class="result-card accent">
           <div class="result-card__label" id="t1-r-bags-label">Мешков 25 кг</div>
           <div class="result-card__value" id="t1-r-bags">—</div>
-          <div class="result-card__unit">шт.</div>
+          <div class="result-card__unit" id="t1-r-bags-unit">шт.</div>
         </div>
         <div class="result-card cost" id="t1-r-cost-card" style="display:none">
           <div class="result-card__label">Стоимость</div>
@@ -759,6 +760,11 @@
           <div class="result-card__value" id="t2-r-vol">—</div>
           <div class="result-card__unit">м³</div>
         </div>
+        <div class="result-card">
+          <div class="result-card__label">Вес бетона</div>
+          <div class="result-card__value" id="t2-r-weight">—</div>
+          <div class="result-card__unit">тонн</div>
+        </div>
         <div class="result-card accent">
           <div class="result-card__label">Миксеров 7 м³</div>
           <div class="result-card__value" id="t2-r-mixers">—</div>
@@ -787,6 +793,8 @@
           <option value="crushed">Щебень (насыпная плотность 1,4 т/м³)</option>
           <option value="gravel">Гравий (насыпная плотность 1,6 т/м³)</option>
           <option value="pgs">ПГС — песчано-гравийная смесь (1,65 т/м³)</option>
+          <option value="shchpgs">ЩПГС — щебёночно-песчано-гравийная (1,7 т/м³)</option>
+          <option value="shchgp">ЩГП — щебёночно-гравийно-песчаная (1,65 т/м³)</option>
         </select>
       </div>
       <div class="form-group full">
@@ -825,6 +833,8 @@
           <option value="10" selected>10 м³ — КАМАЗ с наращенными бортами</option>
           <option value="12">12 м³ — КАМАЗ 6520, MAN</option>
           <option value="20">20 м³ — полуприцеп</option>
+          <option value="t30">30 т — с прицепом</option>
+          <option value="t40">40 т — автопоезд</option>
         </select>
       </div>
       <div class="reserve-row">
@@ -877,6 +887,28 @@
       <div class="price-row"><label>Напольная самовыравнивающая</label><input type="number" data-price="mix_floor_self" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
       <div class="price-row"><label>Клей для блоков</label><input type="number" data-price="mix_block_glue" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
     </div>
+    <div class="price-section">
+      <h3>Сухие смеси — цена за мешок 50 кг</h3>
+      <div class="price-row"><label>Клей для теплоизоляции</label><input type="number" data-price="mix50_heat_glue" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Клей для плитки</label><input type="number" data-price="mix50_tile_glue" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Кладочная смесь</label><input type="number" data-price="mix50_masonry" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Штукатурная смесь</label><input type="number" data-price="mix50_plaster" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Декоративная штукатурка</label><input type="number" data-price="mix50_deco_plaster" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Напольная выравнивающая</label><input type="number" data-price="mix50_floor_leveling" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Напольная самовыравнивающая</label><input type="number" data-price="mix50_floor_self" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Клей для блоков</label><input type="number" data-price="mix50_block_glue" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+    </div>
+    <div class="price-section">
+      <h3>Сухие смеси — россыпью (валом), цена за тонну</h3>
+      <div class="price-row"><label>Клей для теплоизоляции</label><input type="number" data-price="bulk_heat_glue" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Клей для плитки</label><input type="number" data-price="bulk_tile_glue" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Кладочная смесь</label><input type="number" data-price="bulk_masonry" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Штукатурная смесь</label><input type="number" data-price="bulk_plaster" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Декоративная штукатурка</label><input type="number" data-price="bulk_deco_plaster" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Напольная выравнивающая</label><input type="number" data-price="bulk_floor_leveling" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Напольная самовыравнивающая</label><input type="number" data-price="bulk_floor_self" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>Клей для блоков</label><input type="number" data-price="bulk_block_glue" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+    </div>
 
     <!-- Бетон -->
     <div class="price-section">
@@ -919,6 +951,8 @@
       <div class="price-row"><label>Щебень</label><input type="number" data-price="inert_crushed" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
       <div class="price-row"><label>Гравий</label><input type="number" data-price="inert_gravel" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
       <div class="price-row"><label>ПГС</label><input type="number" data-price="inert_pgs" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>ЩПГС</label><input type="number" data-price="inert_shchpgs" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>ЩГП</label><input type="number" data-price="inert_shchgp" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
     </div>
 
     <button class="btn-calc" onclick="savePrices()">Сохранить цены</button>
@@ -1018,7 +1052,7 @@
     const thick = getVal('t1-thick');
     const mix   = document.getElementById('t1-mix').value;
     const mixName = document.getElementById('t1-mix').options[document.getElementById('t1-mix').selectedIndex].text;
-    const bagSize = parseFloat(document.getElementById('t1-bag').value) || 25;
+    const bagSize = parseFloat(document.getElementById('t1-bag').value);
     const reserve = document.getElementById('t1-reserve').checked ? 1.1 : 1;
 
     if (!area || !thick || area <= 0 || thick <= 0) {
@@ -1027,19 +1061,34 @@
 
     const rate    = mixRate[mix] || 1.5;
     const totalKg = area * thick * rate * reserve;
-    const bags    = Math.ceil(totalKg / bagSize);
 
-    document.getElementById('t1-r-kg').textContent  = fmt(totalKg);
-    document.getElementById('t1-r-bags').textContent = fmtInt(bags);
-    document.getElementById('t1-r-bags-label').textContent = `Мешков ${bagSize} кг`;
-    document.getElementById('t1-result').classList.add('visible');
+    document.getElementById('t1-r-kg').textContent = fmt(totalKg);
 
     const reserveText = reserve > 1 ? ' (с запасом 10%)' : '';
-    calcResults.t1 =
-      `Расчёт: Сухие смеси${reserveText}\n` +
-      `Тип смеси: ${mixName}\n` +
-      `Площадь: ${fmt(area)} м², толщина слоя: ${thick} мм\n` +
-      `Расход: ${fmt(totalKg)} кг (${fmtInt(bags)} меш. по ${bagSize} кг)`;
+    if (bagSize > 0) {
+      /* Мешки 25 или 50 кг */
+      const bags = Math.ceil(totalKg / bagSize);
+      document.getElementById('t1-r-bags').textContent = fmtInt(bags);
+      document.getElementById('t1-r-bags-label').textContent = `Мешков ${bagSize} кг`;
+      document.getElementById('t1-r-bags-unit').textContent = 'шт.';
+      calcResults.t1 =
+        `Расчёт: Сухие смеси${reserveText}\n` +
+        `Тип смеси: ${mixName}\n` +
+        `Площадь: ${fmt(area)} м², толщина слоя: ${thick} мм\n` +
+        `Расход: ${fmt(totalKg)} кг (${fmtInt(bags)} меш. по ${bagSize} кг)`;
+    } else {
+      /* Россыпью (валом) — показываем тонны */
+      const tons = totalKg / 1000;
+      document.getElementById('t1-r-bags').textContent = fmt(tons);
+      document.getElementById('t1-r-bags-label').textContent = 'Вес (валом)';
+      document.getElementById('t1-r-bags-unit').textContent = 'тонн';
+      calcResults.t1 =
+        `Расчёт: Сухие смеси (валом)${reserveText}\n` +
+        `Тип смеси: ${mixName}\n` +
+        `Площадь: ${fmt(area)} м², толщина слоя: ${thick} мм\n` +
+        `Расход: ${fmt(totalKg)} кг (${fmt(tons)} т)`;
+    }
+    document.getElementById('t1-result').classList.add('visible');
   }
 
   /* ── TAB 2: Бетон ── */
@@ -1100,7 +1149,9 @@
 
     const mixers = Math.ceil(volM3 / 7);
 
+    const weightT = volM3 * 2.4; // средняя плотность бетона ~2,4 т/м³
     document.getElementById('t2-r-vol').textContent    = fmt(volM3);
+    document.getElementById('t2-r-weight').textContent = fmt(weightT);
     document.getElementById('t2-r-mixers').textContent = fmtInt(mixers);
     document.getElementById('t2-result').classList.add('visible');
     document.getElementById('t2-small-vol').style.display = volM3 < 1 ? '' : 'none';
@@ -1112,13 +1163,13 @@
       `Тип: ${typeName}\n` +
       `Марка: ${grade}\n` +
       `Форма: ${shapeName}\n` +
-      `${sizeText} → объём: ${fmt(volM3)} м³\n` +
+      `${sizeText} → объём: ${fmt(volM3)} м³ (≈ ${fmt(weightT)} т)\n` +
       `Миксеров (7 м³): ${fmtInt(mixers)} шт.`;
   }
 
   /* ── TAB 3: Инертные материалы ── */
-  const density     = { sand: 1.5, crushed: 1.4, gravel: 1.6, pgs: 1.65 };
-  const matNames    = { sand: 'Песок', crushed: 'Щебень', gravel: 'Гравий', pgs: 'ПГС' };
+  const density     = { sand: 1.5, crushed: 1.4, gravel: 1.6, pgs: 1.65, shchpgs: 1.7, shchgp: 1.65 };
+  const matNames    = { sand: 'Песок', crushed: 'Щебень', gravel: 'Гравий', pgs: 'ПГС', shchpgs: 'ЩПГС', shchgp: 'ЩГП' };
 
   /* ── Переключатель режима ввода инертных ── */
   function toggleInertMode() {
@@ -1132,7 +1183,7 @@
   function calcTab3() {
     const mode     = document.getElementById('t3-mode').value;
     const mat      = document.getElementById('t3-mat').value;
-    const truckVol = parseFloat(document.getElementById('t3-truck').value) || 10;
+    const truckVal = document.getElementById('t3-truck').value;
     const reserve  = document.getElementById('t3-reserve').checked ? 1.1 : 1;
     const d        = density[mat] || 1.5;
     let volM3, tons, inputText;
@@ -1164,12 +1215,28 @@
       inputText = `Вес: ${fmt(t)} т`;
     }
 
-    const trucks = Math.ceil(volM3 / truckVol);
+    /* Расчёт количества машин */
+    let trucks, truckLabel, truckText;
+    if (truckVal.startsWith('t')) {
+      /* Машина в тоннах (с прицепом) */
+      const truckT = parseFloat(truckVal.substring(1));
+      const truckM3 = truckT / d;
+      trucks = Math.ceil(tons / truckT);
+      truckLabel = `Машин ${truckT} т (≈ ${fmt(truckM3)} м³)`;
+      truckText  = `Машин (${truckT} т ≈ ${fmt(truckM3)} м³): ${fmtInt(trucks)} шт.`;
+    } else {
+      /* Машина в м³ */
+      const truckVol = parseFloat(truckVal) || 10;
+      const truckT   = truckVol * d;
+      trucks = Math.ceil(volM3 / truckVol);
+      truckLabel = `Самосвалов ${truckVol} м³ (≈ ${fmt(truckT)} т)`;
+      truckText  = `Самосвалов (${truckVol} м³ ≈ ${fmt(truckT)} т): ${fmtInt(trucks)} шт.`;
+    }
 
     document.getElementById('t3-r-vol').textContent    = fmt(volM3);
     document.getElementById('t3-r-ton').textContent    = fmt(tons);
     document.getElementById('t3-r-trucks').textContent = fmtInt(trucks);
-    document.getElementById('t3-r-trucks-label').textContent = `Самосвалов ${truckVol} м³`;
+    document.getElementById('t3-r-trucks-label').textContent = truckLabel;
     document.getElementById('t3-result').classList.add('visible');
 
     const reserveText = reserve > 1 ? ' (с запасом 10%)' : '';
@@ -1179,7 +1246,7 @@
       `${inputText}\n` +
       `Объём: ${fmt(volM3)} м³\n` +
       `Вес: ${fmt(tons)} т\n` +
-      `Самосвалов (${truckVol} м³): ${fmtInt(trucks)} шт.`;
+      `${truckText}`;
   }
 
   /* ── PDF-выгрузка расчёта (через окно печати браузера) ── */
@@ -1340,6 +1407,8 @@
     inert_crushed: 650,
     inert_gravel:  750,
     inert_pgs:     850,
+    inert_shchpgs: 950,
+    inert_shchgp:  900,
   };
 
   /* ── Сохранение цен в localStorage ── */
@@ -1408,11 +1477,19 @@
   calcTab1 = function() {
     _origCalcTab1();
     const mix     = document.getElementById('t1-mix').value;
-    const bagSize = parseFloat(document.getElementById('t1-bag').value) || 25;
+    const bagSize = parseFloat(document.getElementById('t1-bag').value);
     const reserve = document.getElementById('t1-reserve').checked ? 1.1 : 1;
-    const bags    = Math.ceil(getVal('t1-area') * getVal('t1-thick') * (mixRate[mix] || 1.5) * reserve / bagSize);
-    const price   = getPrice('mix_' + mix);
-    showCost('t1-r-cost-card', 't1-r-cost', bags * price);
+    const totalKg = getVal('t1-area') * getVal('t1-thick') * (mixRate[mix] || 1.5) * reserve;
+    let cost = 0;
+    if (bagSize === 50) {
+      cost = Math.ceil(totalKg / 50) * getPrice('mix50_' + mix);
+    } else if (bagSize === 25) {
+      cost = Math.ceil(totalKg / 25) * getPrice('mix_' + mix);
+    } else {
+      /* Валом — цена за тонну */
+      cost = (totalKg / 1000) * getPrice('bulk_' + mix);
+    }
+    showCost('t1-r-cost-card', 't1-r-cost', cost);
   };
 
   /* ── Обновляем calcTab2: добавляем расчёт стоимости ── */
