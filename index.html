@@ -922,6 +922,15 @@
       <div class="price-row"><label>Напольная выравнивающая</label><input type="number" data-price="bulk_floor_leveling" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
       <div class="price-row"><label>Напольная самовыравнивающая</label><input type="number" data-price="bulk_floor_self" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
       <div class="price-row"><label>Клей для блоков</label><input type="number" data-price="bulk_block_glue" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <!-- Мини-калькулятор валом -->
+      <div style="margin-top:16px;padding-top:14px;border-top:2px solid var(--bg)">
+        <div class="price-row">
+          <label style="flex:none;font-weight:700;color:var(--orange)">Быстрый расчёт:</label>
+          <input type="number" id="bulk-calc-kg" placeholder="Вес, кг" min="1" step="1" style="width:100px" />
+          <button onclick="calcBulkPrices()" style="padding:8px 14px;background:var(--orange);color:#fff;border:none;border-radius:var(--radius);font-weight:700;cursor:pointer;font-size:14px">Считать</button>
+        </div>
+        <div id="bulk-calc-result" style="display:none;margin-top:10px;background:var(--bg);border-radius:var(--radius);padding:12px 14px;font-size:14px"></div>
+      </div>
     </div>
 
     <!-- Бетон -->
@@ -1457,6 +1466,37 @@
   };
 
   /* ── Сохранение цен в localStorage ── */
+  /* ── Мини-калькулятор валом (во вкладке Цены) ── */
+  function calcBulkPrices() {
+    const kg = parseFloat(document.getElementById('bulk-calc-kg').value);
+    if (!kg || kg <= 0) { alert('Введите вес в кг'); return; }
+    const tons = kg / 1000;
+    const items = [
+      ['bulk_heat_glue',      'Клей для теплоизоляции'],
+      ['bulk_tile_glue',      'Клей для плитки'],
+      ['bulk_masonry',        'Кладочная смесь'],
+      ['bulk_plaster',        'Штукатурная смесь'],
+      ['bulk_deco_plaster',   'Декоративная штукатурка'],
+      ['bulk_floor_leveling', 'Напольная выравнивающая'],
+      ['bulk_floor_self',     'Напольная самовыравнивающая'],
+      ['bulk_block_glue',     'Клей для блоков'],
+    ];
+    let html = `<strong>${fmt(kg)} кг = ${fmt(tons)} т</strong><br><br>`;
+    items.forEach(([key, name]) => {
+      const inp = document.querySelector(`[data-price="${key}"]`);
+      const price = inp ? parseFloat(inp.value) || 0 : 0;
+      if (price > 0) {
+        const cost = Math.round(tons * price);
+        html += `${name}: <strong>${fmtInt(cost)} руб.</strong> (${fmtInt(price)} руб/т)<br>`;
+      } else {
+        html += `${name}: <span style="color:var(--muted)">цена не указана</span><br>`;
+      }
+    });
+    const res = document.getElementById('bulk-calc-result');
+    res.innerHTML = html;
+    res.style.display = '';
+  }
+
   function savePrices() {
     const prices = {};
     document.querySelectorAll('[data-price]').forEach(input => {
