@@ -344,7 +344,11 @@
       padding: 20px 22px;
       display: none;
     }
-    .result-box.visible { display: block; }
+    .result-box.visible { display: block; animation: fadeIn .3s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
     .result-title {
       font-size: 16px;
       font-weight: 700;
@@ -992,7 +996,7 @@
   <div>
     <a href="tel:+79216174920">+7 921 617-49-20</a>
     &nbsp;·&nbsp;
-    <a href="/cdn-cgi/l/email-protection#96f1e3e5f3e0f5f3fbf3f8e2d6eff7f8f2f3eeb8e4e3"><span class="__cf_email__" data-cfemail="e1869492849782848c848f95a198808f858499cf9394">[email&#160;protected]</span></a>
+    <a href="mailto:gusevcement@yandex.ru">gusevcement@yandex.ru</a>
   </div>
   <div class="footer-city">г. Гусев, ул. Победы, 51</div>
   <div class="footer-city"><a href="privacy.html" style="color:rgba(255,255,255,.5)">Политика конфиденциальности</a></div>
@@ -1024,7 +1028,7 @@
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
   /* ── Tabs ── */
   function switchTab(i) {
     document.querySelectorAll('.tab-btn').forEach((b, idx) =>
@@ -1586,6 +1590,8 @@
   const _origCalcTab1 = calcTab1;
   calcTab1 = function() {
     _origCalcTab1();
+    /* Если оригинальная функция не показала результат — выходим */
+    if (!document.getElementById('t1-result').classList.contains('visible')) return;
     const mix     = document.getElementById('t1-mix').value;
     const bagSize = parseFloat(document.getElementById('t1-bag').value);
     const reserve = document.getElementById('t1-reserve').checked ? 1.1 : 1;
@@ -1597,6 +1603,7 @@
     } else {
       totalKg = getVal('t1-area') * getVal('t1-thick') * (mixRate[mix] || 1.5) * reserve;
     }
+    if (isNaN(totalKg) || totalKg <= 0) return;
     let cost = 0;
     if (bagSize === 0 && customPrice > 0) {
       /* Свободная цена за тонну — показываем всем */
@@ -1615,12 +1622,15 @@
       cost = (totalKg / 1000) * getPrice('bulk_' + mix);
       showCost('t1-r-cost-card', 't1-r-cost', cost);
     }
+    /* Добавляем стоимость в текст заявки/PDF */
+    if (cost > 0) calcResults.t1 += '\nСтоимость: ~' + fmtInt(Math.round(cost)) + ' руб.';
   };
 
   /* ── Обновляем calcTab2: добавляем расчёт стоимости ── */
   const _origCalcTab2 = calcTab2;
   calcTab2 = function() {
     _origCalcTab2();
+    if (!document.getElementById('t2-result').classList.contains('visible')) return;
     const shape   = document.getElementById('t2-shape').value;
     const type    = document.getElementById('t2-type').value;
     const grade   = document.getElementById('t2-grade').value;
@@ -1634,15 +1644,19 @@
       const qty = parseInt(document.getElementById('t2-qty').value) || 1;
       volM3 = Math.PI * r * r * hei * qty * reserve;
     }
+    if (isNaN(volM3) || volM3 <= 0) return;
     const prefix = type === 'gravel' ? 'concrete_' : 'pump_';
     const price  = getPrice(prefix + grade);
-    showCost('t2-r-cost-card', 't2-r-cost', volM3 * price);
+    const cost2 = volM3 * price;
+    showCost('t2-r-cost-card', 't2-r-cost', cost2);
+    if (cost2 > 0) calcResults.t2 += '\nСтоимость: ~' + fmtInt(Math.round(cost2)) + ' руб.';
   };
 
   /* ── Обновляем calcTab3: добавляем расчёт стоимости ── */
   const _origCalcTab3 = calcTab3;
   calcTab3 = function() {
     _origCalcTab3();
+    if (!document.getElementById('t3-result').classList.contains('visible')) return;
     const mode    = document.getElementById('t3-mode').value;
     const mat     = document.getElementById('t3-mat').value;
     const reserve = document.getElementById('t3-reserve').checked ? 1.1 : 1;
@@ -1656,8 +1670,11 @@
     } else {
       tons = getVal('t3-tons-input') * reserve;
     }
+    if (isNaN(tons) || tons <= 0) return;
     const price = getPrice('inert_' + mat);
-    showCost('t3-r-cost-card', 't3-r-cost', tons * price);
+    const cost3 = tons * price;
+    showCost('t3-r-cost-card', 't3-r-cost', cost3);
+    if (cost3 > 0) calcResults.t3 += '\nСтоимость: ~' + fmtInt(Math.round(cost3)) + ' руб.';
   };
 
 </script>
