@@ -1137,6 +1137,7 @@
         `Расход: ${fmt(totalKg)} кг (${fmt(tons)} т)`;
     }
     document.getElementById('t1-result').classList.add('visible');
+    document.getElementById('t1-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   /* ── TAB 2: Бетон ── */
@@ -1207,6 +1208,7 @@
     document.getElementById('t2-r-weight').textContent = fmt(weightT);
     document.getElementById('t2-r-mixers').textContent = fmtInt(mixers);
     document.getElementById('t2-result').classList.add('visible');
+    document.getElementById('t2-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     document.getElementById('t2-small-vol').style.display = volM3 < 1 ? '' : 'none';
 
     const reserveText = reserve > 1 ? ' (с запасом 10%)' : '';
@@ -1313,6 +1315,7 @@
     document.getElementById('t3-r-trucks').textContent = fmtInt(trucks);
     document.getElementById('t3-r-trucks-label').textContent = truckLabel;
     document.getElementById('t3-result').classList.add('visible');
+    document.getElementById('t3-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
     const reserveText = reserve > 1 ? ' (с запасом 10%)' : '';
     calcResults.t3 =
