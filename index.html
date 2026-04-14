@@ -733,6 +733,7 @@
       <div class="form-group" id="t2-cyl-1" style="display:none">
         <label>Диаметр, м</label>
         <input type="number" id="t2-diam" placeholder="например 0.3" min="0.01" step="0.01" />
+        <span class="hint">0.1 м = 10 см, 0.3 м = 30 см, 0.5 м = 50 см</span>
       </div>
       <div class="form-group" id="t2-cyl-2" style="display:none">
         <label>Количество, шт.</label>
@@ -742,6 +743,7 @@
       <div class="form-group">
         <label>Высота (толщина), м</label>
         <input type="number" id="t2-hei" placeholder="например 0.2" min="0.01" step="0.01" />
+        <span class="hint" id="t2-hei-hint">0.1 м = 10 см, 0.2 м = 20 см, 0.5 м = 50 см</span>
       </div>
       <div class="reserve-row">
         <input type="checkbox" id="t2-reserve" />
@@ -1161,6 +1163,9 @@
     document.getElementById('t2-cyl-2').style.display  = isRect ? 'none' : '';
     /* Подсказка в поле высоты: плита ~0.2 м, колонна ~3 м */
     document.getElementById('t2-hei').placeholder = isRect ? 'например 0.2' : 'например 3';
+    document.getElementById('t2-hei-hint').textContent = isRect
+      ? '0.1 м = 10 см, 0.2 м = 20 см, 0.5 м = 50 см'
+      : 'Высота колонны/сваи в метрах (1 м, 2.5 м, 3 м)';
   }
 
   function calcTab2() {
