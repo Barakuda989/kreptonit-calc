@@ -1159,6 +1159,8 @@
     document.getElementById('t2-rect-2').style.display = isRect ? '' : 'none';
     document.getElementById('t2-cyl-1').style.display  = isRect ? 'none' : '';
     document.getElementById('t2-cyl-2').style.display  = isRect ? 'none' : '';
+    /* Подсказка в поле высоты: плита ~0.2 м, колонна ~3 м */
+    document.getElementById('t2-hei').placeholder = isRect ? 'например 0.2' : 'например 3';
   }
 
   function calcTab2() {
