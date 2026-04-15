@@ -810,7 +810,7 @@
           <option value="gravel">Гравий</option>
           <option value="pgs">ПГС — песчано-гравийная смесь</option>
           <option value="shchpgs">ЩПГС — щебёночно-песчано-гравийная</option>
-          <option value="shchgp">ЩГП — щебёночно-гравийно-песчаная</option>
+          <option value="shchgs">ЩГС — щебёночно-гравийно-песчаная смесь</option>
         </select>
         <span class="hint" id="t3-mat-hint">1 м³ = 1,5 т (для расчёта количества машин)</span>
       </div>
@@ -984,7 +984,7 @@
       <div class="price-row"><label>Гравий</label><input type="number" data-price="inert_gravel" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
       <div class="price-row"><label>ПГС</label><input type="number" data-price="inert_pgs" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
       <div class="price-row"><label>ЩПГС</label><input type="number" data-price="inert_shchpgs" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
-      <div class="price-row"><label>ЩГП</label><input type="number" data-price="inert_shchgp" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
+      <div class="price-row"><label>ЩГС</label><input type="number" data-price="inert_shchgs" placeholder="0" min="0" /><span class="price-unit">руб.</span></div>
     </div>
 
     <button class="btn-calc" onclick="savePrices()">Сохранить цены</button>
@@ -1223,8 +1223,8 @@
   }
 
   /* ── TAB 3: Инертные материалы ── */
-  const density     = { sand: 1.5, crushed: 1.4, gravel: 1.6, pgs: 1.65, shchpgs: 1.7, shchgp: 1.65 };
-  const matNames    = { sand: 'Песок', crushed: 'Щебень', gravel: 'Гравий', pgs: 'ПГС', shchpgs: 'ЩПГС', shchgp: 'ЩГП' };
+  const density     = { sand: 1.5, crushed: 1.4, gravel: 1.6, pgs: 1.65, shchpgs: 1.7, shchgs: 1.65 };
+  const matNames    = { sand: 'Песок', crushed: 'Щебень', gravel: 'Гравий', pgs: 'ПГС', shchpgs: 'ЩПГС', shchgs: 'ЩГС' };
 
   /* Подсказка: сколько тонн в 1 м³ */
   function updateMatHint() {
@@ -1486,7 +1486,7 @@
     inert_gravel:  750,
     inert_pgs:     850,
     inert_shchpgs: 950,
-    inert_shchgp:  900,
+    inert_shchgs:  900,
   };
 
   /* ── Сохранение цен в localStorage ── */
