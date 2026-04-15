@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://barakuda989.github.io/kreptonit-calc/sitemap.xml
