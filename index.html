@@ -615,10 +615,11 @@
       right: 20px;
       display: flex;
       flex-direction: column;
+      align-items: center;
       gap: 10px;
       z-index: 900;
     }
-    .msg-btn {
+    .msg-toggle {
       width: 56px;
       height: 56px;
       border-radius: 50%;
@@ -629,7 +630,35 @@
       justify-content: center;
       box-shadow: 0 4px 16px rgba(0,0,0,.25);
       transition: transform .2s, box-shadow .2s;
+      background: var(--orange);
+      order: 99;
+    }
+    .msg-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(0,0,0,.35);
+    }
+    .msg-toggle svg { width: 28px; height: 28px; fill: #fff; }
+    .msg-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,.25);
+      transition: transform .2s, box-shadow .2s, opacity .25s, height .25s;
       text-decoration: none;
+      opacity: 0;
+      height: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .messengers.open .msg-btn {
+      opacity: 1;
+      height: 56px;
+      pointer-events: auto;
     }
     .msg-btn:hover {
       transform: scale(1.1);
@@ -641,7 +670,10 @@
     .msg-btn svg { width: 28px; height: 28px; fill: #fff; }
     @media (max-width: 600px) {
       .messengers { bottom: 14px; right: 14px; }
-      .msg-btn { width: 50px; height: 50px; }
+      .msg-toggle { width: 50px; height: 50px; }
+      .msg-toggle svg { width: 24px; height: 24px; }
+      .msg-btn { width: 50px; }
+      .messengers.open .msg-btn { height: 50px; }
       .msg-btn svg { width: 24px; height: 24px; }
     }
   </style>
@@ -1757,6 +1789,22 @@
   <a class="msg-btn max" href="https://max.ru" target="_blank" rel="noopener" title="Написать в MAX">
     <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#fff" stroke-width="2.5"/><path d="M12 3a9 9 0 0 1 6.36 15.36" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><circle cx="12" cy="12" r="3.5" fill="#fff"/></svg>
   </a>
+  <!-- Кнопка открытия/закрытия -->
+  <button class="msg-toggle" id="msgToggle" aria-label="Открыть мессенджеры">
+    <svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>
+  </button>
 </div>
+<script>
+  (function () {
+    var toggle = document.getElementById('msgToggle');
+    var panel  = toggle.closest('.messengers');
+    toggle.addEventListener('click', function () {
+      panel.classList.toggle('open');
+    });
+    document.addEventListener('click', function (e) {
+      if (!panel.contains(e.target)) panel.classList.remove('open');
+    });
+  })();
+</script>
 </body>
 </html>
